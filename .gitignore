@@ -1,0 +1,10 @@
+# Byte-compiled / optimized / DLL files
+__pychache__/
+
+# Environment variables
+.env
+
+# Output data
+confusion_matrices.png
+detailed_output.csv
+output.csv

@@ -30,7 +30,7 @@ def main():
 
     save_results_to_csv(results, input_file, output_file)
     # Compare results with true values and show confusion matrix
-    evaluate_model_predictions(model_id, system_prompt_file, output_file)
+    evaluate_model_predictions(model_id, system_prompt_file, input_file, output_file)
     generate_confusion_matrices(output_file, show_plot=False)
 
 if __name__ == "__main__":

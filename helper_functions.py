@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 import csv
 import pandas as pd
 import matplotlib.pyplot as plt
-from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, accuracy_score
 import krippendorff
 
 # Load API key from environment variable
@@ -163,7 +163,38 @@ def krippendorff_alpha(data, level="detailed"):
     alpha = krippendorff.alpha(reliability_data=values, level_of_measurement='nominal')
     return round(alpha, 4)
 
-def evaluate_model_predictions(model_id, system_prompt_file, output_file):
+def brennan_prediger_alpha(data, level="detailed"):
+    """
+    Computes Brennan-Prediger's alpha for inter-rater agreement.
+    
+    Parameters:
+        data (pd.DataFrame): DataFrame containing true and predicted relations.
+        level (str): "detailed" for fine-grained labels, "simplified" for mapped categories.
+
+    Returns:
+        float: Brennan-Prediger's alpha value.
+    """
+    if level == "detailed":
+        true_col, pred_col = "relation_true", "relation_predicted"
+        num_classes = 7 # positive1, positive2, neutral1, neutral2, negative1, negative2, none
+    elif level == "simplified":
+        true_col, pred_col = "relation_true_simplified", "relation_predicted_simplified"
+        num_classes = 4 # positive, neutral, negative, none
+    else:
+        raise ValueError("Invalid level. Choose 'detailed' or 'simplified'.")
+
+    # Calculate observed agreement (accuracy)
+    p0 = accuracy_score(data[true_col], data[pred_col]) # TODO FIX ERROR CAUSED BY NaN VALUES
+
+    # Expected agreement assuming equal probability per class
+    pe = 1 / num_classes
+
+    # Compute Brennan-Prediger's Alpha
+    alpha_bp = (p0 - pe) / (1 - pe)
+
+    return round(alpha_bp, 4)
+
+def evaluate_model_predictions(model_id, system_prompt_file, input_file, output_file):
     """
     Evaluates the model's predictions against the true values in the output file.
     """
@@ -202,84 +233,24 @@ def evaluate_model_predictions(model_id, system_prompt_file, output_file):
     correct_detailed_count = data["correct_detailed"].sum()
     correct_simplified_count = data["correct_simplified"].sum()
     
-    success_rate_detailed = round((correct_detailed_count / total_count) * 100, 2)
-    success_rate_simplified = round((correct_simplified_count / total_count) * 100, 2)
+    accuracy_detailed = round((correct_detailed_count / total_count) * 100, 2)
+    accuracy_simplified = round((correct_simplified_count / total_count) * 100, 2)
 
     # Compute Krippendorf's Alpha
     alpha_detailed = krippendorff_alpha(data, level="detailed")
     alpha_simplified = krippendorff_alpha(data, level="simplified")
+    # Compute Brennan-Prediger Alpha
+    alpha_bp_detailed = brennan_prediger_alpha(data, level="detailed")
+    alpha_bp_simplified = brennan_prediger_alpha(data, level="simplified")
 
-    # Print evaluation results
-    # print("\nEvaluation Results:")
-    # print("===================")
-    # print(f"Number of samples: {total_count}")
-
-    # print("\n\033[1mDetailed Classification:\033[0m")
-    # print(f"Correct Predictions:  {correct_detailed_count}")
-    # print(f"Wrong Predictions:    {total_count - correct_detailed_count}")
-    # print(f"Success Rate:         {success_rate_detailed}%")
-    # print(f"Krippendorff's Alpha:  {alpha_detailed}")
-
-    # print("\n\033[1;47mSimplified Classification:\033[0m")
-    # print(f"\033[32mCorrect Predictions:  {correct_simplified_count}\033[0m")
-    # print(f"\033[31mWrong Predictions:    {total_count - correct_simplified_count}\033[0m")
-    # print(f"Success Rate:         {success_rate_simplified}%")
-    # print(f"Krippendorff's Alpha:  {alpha_simplified}")
-
-    print("\n\033[1;4mEvaluation Summary\033[0m")  # Bold and Underlined
-    print("\033[1;37m" + "═" * 40 + "\033[0m")  # Bold White Line
-    print(f"\033[1mTotal Samples:\033[0m {total_count}\n")
-
-    # Detailed Classification
-    print("\033[1;34m─── Detailed Results ───\033[0m")  # Bold Blue
-    print(f"✅ \033[32mCorrect:\033[0m        {correct_detailed_count}")  
-    print(f"❌ \033[31mIncorrect:\033[0m      {total_count - correct_detailed_count}")  
-    print(f"📊 \033[1mAccuracy:\033[0m       {success_rate_detailed}%")
-    print(f"📈 \033[1mKrippendorff’s Alpha:\033[0m {alpha_detailed}\n")
-
-    # Simplified Classification
-    print("\033[1;35m─── Simplified Results ───\033[0m")  # Bold Purple
-    print(f"✅ \033[32mCorrect:\033[0m        {correct_simplified_count}")  
-    print(f"❌ \033[31mIncorrect:\033[0m      {total_count - correct_simplified_count}")  
-    print(f"📊 \033[1mAccuracy:\033[0m       {success_rate_simplified}%")
-    print(f"📈 \033[1mKrippendorff’s Alpha:\033[0m {alpha_simplified}")
-
-    # Define separator
-    separator = "\033[1;37m" + "━" * 50 + "\033[0m"  # Bold white separator
-
-    # Title
-    print("\n\033[1;4mModel Evaluation Summary\033[0m")  # Bold and Underlined
-    print(separator)
-    print(f"\033[1mTotal Samples:\033[0m {total_count:,}\n")  # Comma formatting for readability
-
-    # Detailed Classification
-    print("\033[1;34mDetailed Classification\033[0m")  # Bold Blue Header
-    print(separator)
-    print(f"\033[1mMetric\033[0m".ljust(30) + "\033[1mValue\033[0m")
-    print("-" * 50)
-    print(f"Correct Predictions:".ljust(30) + f"\033[32m{correct_detailed_count:,}\033[0m")  # Green
-    print(f"Incorrect Predictions:".ljust(30) + f"\033[31m{total_count - correct_detailed_count:,}\033[0m")  # Red
-    print(f"Accuracy:".ljust(30) + f"{success_rate_detailed:.2f}%")
-    print(f"Krippendorff’s Alpha:".ljust(30) + f"{alpha_detailed:.3f}\n")
-
-    # Simplified Classification
-    print("\033[1;35mSimplified Classification\033[0m")  # Bold Purple Header
-    print(separator)
-    print(f"\033[1mMetric\033[0m".ljust(30) + "\033[1mValue\033[0m")
-    print("-" * 50)
-    print(f"Correct Predictions:".ljust(30) + f"\033[32m{correct_simplified_count:,}\033[0m")  # Green
-    print(f"Incorrect Predictions:".ljust(30) + f"\033[31m{total_count - correct_simplified_count:,}\033[0m")  # Red
-    print(f"Accuracy:".ljust(30) + f"{success_rate_simplified:.2f}%")
-    print(f"Krippendorff’s Alpha:".ljust(30) + f"{alpha_simplified:.3f}")
-
-    print(separator)
-
+    # Print evaluation to console
     # Define table borders and formatting
     top_border = "\033[1;37m┏" + "━" * 53 + "┓\033[0m"
     middle_border = "\033[1;37m┣" + "━" * 53 + "┫\033[0m"
     bottom_border = "\033[1;37m┗" + "━" * 53 + "┛\033[0m"
     # Title
     print("\n\033[1;4mPre-Labeling Evaluation Summary\033[0m\n")  # Bold and Underlined
+    print(f"Input file: {input_file}")
     print(f"Number of samples: {total_count}")
     print(f"Model used: {model_id}")
     print(f"Prompt used: {system_prompt_file}\n")
@@ -289,20 +260,22 @@ def evaluate_model_predictions(model_id, system_prompt_file, output_file):
     # Data rows
     print(f"┃ {'Correct Predictions':<21} ┃ \033[32m{correct_detailed_count:>11}\033[0m ┃ \033[32m{correct_simplified_count:>13}\033[0m ┃")  # Green
     print(f"┃ {'Incorrect Predictions':<21} ┃ \033[31m{total_count - correct_detailed_count:>11}\033[0m ┃ \033[31m{total_count - correct_simplified_count:>13}\033[0m ┃")  # Red
-    print(f"┃ {'Accuracy':<21} ┃ {success_rate_detailed:>10}% ┃ {success_rate_simplified:>12}% ┃")
+    print(f"┃ {'Accuracy':<21} ┃ {accuracy_detailed:>10}% ┃ {accuracy_simplified:>12}% ┃")
     print(f"┃ {'Krippendorff’s Alpha':<21} ┃ {alpha_detailed:>11.3f} ┃ {alpha_simplified:>13.3f} ┃")
+    print(f"┃ {'Brennan-Prediger’s Alpha':<21} ┃ {alpha_bp_detailed:>11.3f} ┃ {alpha_bp_simplified:>13.3f} ┃")
     print(bottom_border)
 
-    print("\033[1;37m" + "━" * 48) # line
-    print(f"\033[1m{'Metric':<21} {'Full Labels':>11} {'Simple Labels':>14} \033[0m") # Bold text
-    print("-" * 48) # dashed line
-    print(f"{'Correct Predictions':<21} \033[32m{correct_detailed_count:>11} \033[0m \033[32m{correct_simplified_count:>13}\033[0m")  # Green text
-    print(f"{'Incorrect Predictions':<21} \033[31m{total_count - correct_detailed_count:>11} \033[0m \033[31m{total_count - correct_simplified_count:>13}\033[0m")  # Red text
-    print(f"{'Accuracy':<21} {success_rate_detailed:>10}% {success_rate_simplified:>13}%")
-    print(f"{'Krippendorff’s Alpha':<21} {alpha_detailed:>11.3f} {alpha_simplified:>14.3f}")
-    print("\033[1;37m" + "━" * 48) # line
-    
-
+    # Save evaluation to file
+    evaluation_file = pd.read_csv("evaluation.csv")
+    evaluation_file.append({
+        # Metadata
+        "dataset": input_file, "sample_size": total_count, "model": model_id, "prompt": system_prompt_file,
+        # Detailed labels
+        "accuracy_detailed": accuracy_detailed, "krippendorff_detailed": alpha_detailed,
+        # Simplified labels
+        "accuracy_simplified": accuracy_simplified, "krippendorff_simplified": alpha_simplified,
+        })
+    evaluation_file.to_csv("evaluation.csv", index=False)
 
     # Optionally, save detailed comparison as a separate CSV
     detailed_output = "detailed_output.csv"

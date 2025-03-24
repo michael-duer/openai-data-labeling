@@ -15,8 +15,18 @@ if "OPENAI_API_KEY" in os.environ:
 else:
     raise ValueError("Please set the OPENAI_API_KEY in the .env file.")
 
-def load_csv(filepath):
-    """Load sentences to label from a CSV file."""
+def generate_filename(model_id,system_prompt_file,input_file):
+    """Generate filename based on the input parameters used"""
+    # Remove file type from name
+    clean_prompt = os.path.splitext(system_prompt_file)[0]
+    clean_input = os.path.splitext(input_file)[0]
+
+    return f"{model_id}_{clean_prompt}_{clean_input}"
+
+
+def load_csv(filename):
+    """Load sentences to label from a CSV file inside the data/samples/ folder."""
+    filepath = os.path.join("..", "data", "samples", filename)
     data = []
     with open(filepath, mode='r', encoding='utf-8') as file:
         reader = csv.DictReader(file)
@@ -30,7 +40,7 @@ def load_csv(filepath):
 
 def load_system_prompt(filename):
     """Load a system prompt from a file inside the 'prompts' folder."""
-    filepath = os.path.join("prompts", filename)
+    filepath = os.path.join("..", "prompts", filename)
     with open(filepath, "r", encoding="utf-8") as file:
         return file.read()
 
@@ -111,11 +121,11 @@ def save_results_to_csv(results, input_file, output_file):
         input_file (str): Path to the input CSV file containing true relations.
     """
     # Load true relations from the input file
-    input_data = pd.read_csv(input_file)
+    input_filepath = os.path.join("..", "data", "samples", input_file)
+    input_data = pd.read_csv(input_filepath)
 
     # Convert results (list of dicts) to DataFrame
     results_df = pd.DataFrame(results)
-    results_df.to_csv("results.csv", index=False)
 
     # Merge results with true relations based on sentence, head, and tail
     merged_df = pd.merge(
@@ -128,7 +138,7 @@ def save_results_to_csv(results, input_file, output_file):
     merged_df.rename(columns={"relation_x": "relation_predicted","relation_y": "relation_true"}, inplace=True)
 
     # Sometimes the api removes punctuation from the sentences resulting in missing values after the merge.
-    # To solve this issue, we identify the NA values and perform a fuzzy match to find the correct sentence, and add the missing true label 
+    # To solve this issue, we identify the NA values and perform a fuzzy match to find the correct sentence, and add the missing true labels 
     missing_true = merged_df["relation_true"].isna()
     # Helper function to find best match only when needed
     def fuzzy_match_missing_rows(row, reference_df):
@@ -144,7 +154,8 @@ def save_results_to_csv(results, input_file, output_file):
     )
 
     # Save the merged results to the output CSV
-    merged_df.to_csv(output_file, index=False)
+    output_filepath = os.path.join("..", "data", "api_output", output_file)
+    merged_df.to_csv(output_filepath, index=False)
     print(f"Results saved to {output_file}")
 
 def krippendorff_alpha(data, level="detailed"):
@@ -216,7 +227,8 @@ def evaluate_model_predictions(model_id, system_prompt_file, input_file, output_
     Evaluates the model's predictions against the true values in the output file.
     """
     # Load data from the output CSV file
-    data = pd.read_csv(output_file)
+    output_filepath = os.path.join("..", "data", "api_output", output_file)
+    data = pd.read_csv(output_filepath)
     
     # Ensure necessary columns are present
     if "relation_true" not in data.columns or "relation_predicted" not in data.columns:
@@ -283,7 +295,8 @@ def evaluate_model_predictions(model_id, system_prompt_file, input_file, output_
     print(bottom_border)
 
     # Add evaluation data as new row to csv file
-    evaluation_file = pd.read_csv("evaluation.csv")
+    evaluation_filepath = os.path.join("..", "data", "evaluation", "evaluation.csv")
+    evaluation_file = pd.read_csv(evaluation_filepath)
     new_row = pd.DataFrame([{
         # Metadata
         "dataset": input_file, "sample_size": total_count, "model": model_id, "prompt": system_prompt_file,
@@ -293,24 +306,25 @@ def evaluate_model_predictions(model_id, system_prompt_file, input_file, output_
         "accuracy_simplified": accuracy_simplified, "krippendorff_simplified": alpha_simplified, "bp_simplified": alpha_bp_simplified
         }])
     evaluation_file = pd.concat([evaluation_file, new_row], ignore_index=True)
-    evaluation_file.to_csv("evaluation.csv", index=False)
+    evaluation_file.to_csv(evaluation_filepath, index=False)
 
     # Optionally, save detailed comparison as a separate CSV
-    detailed_output = "detailed_output.csv"
-    data.to_csv(detailed_output, index=False)
+    detailed_output_filepath = os.path.join("..", "data", "api_output", f"detailed_{output_file}")
+    data.to_csv(detailed_output_filepath, index=False)
 
-def generate_confusion_matrices(model_id, system_prompt_file, input_file, csv_file, show_plot = True):
+def generate_confusion_matrices(model_id, system_prompt_file, input_file, output_file, show_plot = True):
     """
     Generate and save two confusion matrix plots:
     1. One with detailed labels (positive1, positive2, etc.).
     2. One that simplifies labels into broader categories (positive, neutral, negative, none).
 
     Parameters:
-        csv_file (str): Path to the CSV file containing the true and predicted relations.
+        output_file (str): Path to the CSV file containing the true and predicted relations.
         show_plot (bool): Whether to display the plots.
     """
-    # Load the CSV file
-    data = pd.read_csv(csv_file)
+    # Load the output CSV file
+    output_filepath = os.path.join("..", "data", "api_output", output_file)
+    data = pd.read_csv(output_filepath)
 
     # Check for necessary columns
     if "relation_true" not in data.columns or "relation_predicted" not in data.columns:
@@ -360,7 +374,13 @@ def generate_confusion_matrices(model_id, system_prompt_file, input_file, csv_fi
     plt.xlabel("Predicted Label",fontsize=12, labelpad=10.0)
     plt.ylabel("True Label",fontsize=12, labelpad=10.0)
 
-    plt.suptitle(f"Model: {model_id}; Prompt: {system_prompt_file}; Sample: {input_file}", fontsize=16, fontweight="bold", y=0.98)
+    # Add title containing what model, prompt and sample were used
+    clean_prompt_name = os.path.splitext(system_prompt_file)[0]
+    clean_sample_name = os.path.splitext(input_file)[0]
+    plt.suptitle(f"$\\bf{{Model:}}$ {model_id};     $\\bf{{Prompt:}}$ {clean_prompt_name};     $\\bf{{Sample:}}$ {clean_sample_name}", 
+                 fontsize=16, 
+                 y=0.98
+                 )
 
     # Display plots if input parameter is set
     plt.tight_layout()
@@ -368,4 +388,6 @@ def generate_confusion_matrices(model_id, system_prompt_file, input_file, csv_fi
         plt.show()
     
     # Save image
-    disp1.figure_.savefig("confusion_matrices.png")
+    plot_name = f"cm_{generate_filename(model_id,system_prompt_file,input_file)}.png"
+    plot_filepath = os.path.join("..","data","evaluation","confusion_matrices", plot_name)
+    disp1.figure_.savefig(plot_filepath)

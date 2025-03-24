@@ -1,0 +1,76 @@
+sentence,head,tail,relation_predicted,relation_true
+"A short time later, with a serious look on Donald Trump's face, he said to James Comey, “I need loyalty.",Donald Trump,James Comey,positive1,neutral2
+James Comey said Donald Trump could count on James Comey to always tell him the truth.,Donald Trump,James Comey,positive2,neutral2
+"Sensing that Donald Trump needed more from James Comey, James Comey added that Donald Trump could count on him as being “reliable” in one way.",James Comey,Donald Trump,positive1,positive1
+Donald Trump had invited James Comey to dinner and decided James Comey's job security was on the menu.,Donald Trump,James Comey,negative1,positive1
+Morty Levine’d still vote for Donald Trump.”,Morty Levine,Donald Trump,positive1,positive1
+"Jeff Sessions’s task was to try to explain the contacts he had had with the Russian ambassador, contacts that had later caused Jeff Sessions to recuse himself—and made Jeff Sessions the president’s punching bag.",Jeff Sessions,Russian ambassador,neutral1,neutral2
+"Jeff Sessions’s task was to try to explain the contacts he had had with the Russian ambassador, contacts that had later caused Jeff Sessions to recuse himself—and made Jeff Sessions Donald Trump’s punching bag.",Donald Trump,Jeff Sessions,negative1,negative1
+"Five days later, on June 13, it was Jeff Sessions’s turn to testify before the Senate Intelligence Committee.",Jeff Session,Senate Intelligence Committee,neutral1,neutral2
+“The bitch is dead.”,Steve Bannon,Ivanka Trump,negative1,negative1
+"For Bannon, it was a deeply satisfying slap in the face of liberal rectitude—Elon Musk and Bob Iger immediately resigned from Trump’s business council—and confirmation of Trump’s true Bannonite instincts.",Elon Musk,Trump’s business council,negative1,negative1
+"For Bannon, it was a deeply satisfying slap in the face of liberal rectitude—Elon Musk and Bob Iger immediately resigned from Trump’s business council—and confirmation of Trump’s true Bannonite instincts.",Bob Iger,Trump’s business council,negative1,negative1
+"For Bannon, it was a deeply satisfying slap in the face of liberal rectitude—Elon Musk and Bob Iger immediately resigned from Trump’s business council—and confirmation of Trump’s true Bannonite instincts.",Bannon,Trump,positive1,positive2
+It was Steve Bannon’s wall around Donald Trump—one that Steve Bannon hoped would keep Jarvanka out.,Steve Bannon,Donald Trump,positive1,positive1
+It was Steve Bannon’s wall around the president—one that Steve Bannon hoped would keep Jarvanka out.,Steve Bannon,Jarvanka,negative1,negative2
+"And at Bannon’s prompting, Kasowitz attempted to further insulate the president by giving his client a central piece of advice: send the kids home.",Kasowitz,the president,positive1,positive1
+"Bannon then installed Mark Corallo, a former Karl Rove communications staffer, as the firewall spokesperson.",Bannon,Mark Corallo,positive1,positive1
+"Bannon then installed Mark Corallo, a former Karl Rove communications staffer, as the firewall spokesperson.",Mark Corallo,Karl Rove,neutral1,neutral1
+"Donald Trump, as Bannon described the plan in private and as he urged his boss, would no longer be addressing any of these areas",Bannon,Donald Trump,positive1,neutral2
+"Bannon had previously bonded with Kasowitz when the attorney had handled a series of near-death problems on the campaign, including dealing with a vast number of allegations and legal threats from an ever growing list of women accusing Trump of molesting and harassing them.",Bannon,Kasowitz,positive1,positive2
+"Unable to hire prestige talent, Bannon turned to one of the president’s longtime hit-man lawyers, Marc Kasowitz.",Bannon,Marc Kasowitz,positive1,positive1
+The professional White House was united against the amateur family White House.,The professional White House,the amateur family White House,negative2,positive2
+"What’s more, whatever breach there had been between Bannon and Priebus came smoothly together over their mutual loathing of Jared and Ivanka.",Bannon,Priebus,positive2,negative2
+"What’s more, whatever breach there had been between Bannon and Priebus came smoothly together over their mutual loathing of Jared and Ivanka.",Bannon,Priebus,positive2,positive2
+"What’s more, whatever breach there had been between Bannon and Priebus came smoothly together over their mutual loathing of Jared and Ivanka.",Bannon,Jared,negative1,negative1
+"What’s more, whatever breach there had been between Bannon and Priebus came smoothly together over their mutual loathing of Jared and Ivanka.",Bannon,Ivanka,negative1,negative1
+"What’s more, whatever breach there had been between Bannon and Priebus came smoothly together over their mutual loathing of Jared and Ivanka.",Priebus,Jared,negative1,negative1
+"What’s more, whatever breach there had been between Bannon and Priebus came smoothly together over their mutual loathing of Jared and Ivanka.",Priebus,Ivanka,negative1,negative1
+"Steve Bannon’s off-balance-sheet communications staff—Bossie, Lewandowski, Jason Miller, Sam Nunberg (even though he had long fallen out with Trump himself), and Alexandra Preate—formed quite a private army of leakers and defenders.",Steve Bannon,Bossie,positive1,positive2
+"Steve Bannon’s off-balance-sheet communications staff—Bossie, Lewandowski, Jason Miller, Sam Nunberg (even though he had long fallen out with Trump himself), and Alexandra Preate—formed quite a private army of leakers and defenders.",Steve Bannon,Lewandowski,positive1,positive2
+"Steve Bannon’s off-balance-sheet communications staff—Bossie, Lewandowski, Jason Miller, Sam Nunberg (even though he had long fallen out with Trump himself), and Alexandra Preate—formed quite a private army of leakers and defenders.",Steve Bannon,Jason Miller,positive1,positive2
+"Steve Bannon’s off-balance-sheet communications staff—Bossie, Lewandowski, Jason Miller, Sam Nunberg (even though he had long fallen out with Trump himself), and Alexandra Preate—formed quite a private army of leakers and defenders.",Steve Bannon,Sam Nunberg,positive1,positive2
+"Steve Bannon’s off-balance-sheet communications staff—Bossie, Lewandowski, Jason Miller, Sam Nunberg (even though he had long fallen out with Trump himself), and Alexandra Preate—formed quite a private army of leakers and defenders.",Steve Bannon,Alexandra Preate,positive1,positive2
+"His off-balance-sheet communications staff—Bossie, Lewandowski, Jason Miller, Sam Nunberg (even though he had long fallen out with Trump himself), and Alexandra Preate—formed quite a private army of leakers and defenders.",Sam Nunberg,Trump,negative1,negative2
+"“You,” Steve Bannon said, pointing at Ivanka Trump as the president watched, “are a fucking liar.”",Steve Bannon,Ivanka Trump,negative1,negative2
+"In the Oval Office, in front of Ivanka Trump’s father, Bannon openly attacked her.",Bannon,Ivanka Trump,negative1,negative1
+"In the Oval Office, in front of Donald Trump, Bannon openly attacked Ivanka Trump.",Ivanka Trump,Donald Trump,neutral1,positive2
+"Bannon, assured by everyone that there was no winning against the Trump family, hardly tried to hide his satisfied belief that he was going to outplay them",Bannon,Trump family,negative1,negative2
+"For Bannon to live, Kushner would have to be wholly discredited—pilloried, investigated, possibly even jailed.",Bannon,Kushner,negative1,negative2
+Part of the by now deep enmity between the First Family couple and their allies and Bannon and his team was the Jarvanka conviction that Bannon had played a part in many of the reports of Kushner’s interactions with the Russians.,Jarvanka,Bannon,negative1,negative2
+The Jarvanka side believed that Bannon was the source.,Jarvanka,Bannon,negative1,negative2
+"On May 26, the day before the presidential party returned from the overseas trip, the Washington Post reported that during the transition, Kushner and Sergey Kislyak, the Russian ambassador, had, at Kushner’s instigation, discussed the possibility of having the Russians set up a private communications channel between the transition team and the Kremlin.",Kushner,Sergey Kislyak,neutral1,neutral2
+Standing right over the president’s shoulder was Michael Flynn.,Michael Flynn,the president,neutral1,positive1
+"That Saturday night, in a bizarre spectacle, the Mar-a-Lago terrace became a public Situation Room when President Trump and Prime Minister Abe openly discussed how to respond to North Korea’s launch of a missile three hundred miles into the Sea of Japan.",President Trump,Prime Minister Abe,neutral2,neutral2
+"But the president was undisturbed—or, in one version, “aggressively defensive”—and, while the greater White House looked on askance, Trump chose to take Flynn with him to Mar-a-Lago for his scheduled weekend with Shinzo Abe, the Japanese prime minister.",Trump,Flynn,positive1,positive1
+"After the Post story, Priebus and Bannon questioned Flynn again.",Priebus,Flynn,neutral1,negative1
+"After the Post story, Priebus and Bannon questioned Flynn again.",Bannon,Flynn,neutral1,negative1
+"Flynn equivocated, and Anton, suddenly concerned, advised him that if he couldn’t be sure they ought to “walk it back.”",Anton,Flynn,neutral1,positive1
+"Anton applied an obvious test: “If Michael Flynn knew that there might be a tape of this conversation that could surface, would you still be a hundred percent sure?”",Michael Flynn,Anton,neutral1,neutral2
+"A few hours later, Flynn called Anton back with some worries about the statement.",Flynn,Anton,neutral1,neutral2
+"But later that day, DeYoung called Anton and asked if she could use Flynn’s denial on the record.",DeYoung,Anton,neutral1,neutral1
+"Flynn declared that he had had no such conversations, absolutely no conversation, he confirmed again, and the interview, attended by Karen DeYoung and senior National Security Council official and spokesman Michael Anton, ended soon thereafter.",Karen DeYoung,Flynn,neutral1,neutral2
+"Flynn declared that he had had no such conversations, absolutely no conversation, he confirmed again, and the interview, attended by Karen DeYoung and senior National Security Council official and spokesman Michael Anton, ended soon thereafter.",Karen DeYoung,Michael Anton,neutral2,neutral2
+"Flynn declared that he had had no such conversations, absolutely no conversation, he confirmed again, and the interview, attended by senior National Security Council official and spokesman Michael Anton, ended soon thereafter.",Flynn,Michael Anton,neutral1,neutral2
+"Flynn declared that he had had no such conversations, absolutely no conversation, he confirmed again, and the interview, attended by senior National Security Council official and spokesman Michael Anton, ended soon thereafter.",Michael Anton,National Security Council,neutral1,neutral1
+Did you talk to the Russians about sanctions?,Karen DeYoung,Michael Flynn,none,neutral1
+"To all outward appearances, it was an uneventful background interview, and DeYoung, Columbo-like in her affect, aroused no suspicions when she broached the de rigueur question: “My colleagues asked me to ask Michael Flynn this:",DeYoung,Michael Flynn,neutral1,neutral2
+Karen DeYoung and Michael Flynn met not in his office but in the most ornate room in the Eisenhower Executive Office Building—the same room where Japanese diplomats waited to meet with Secretary of State Cordell Hull as he learned of the attack on Pearl Harbor.,Karen DeYoung,Michael Flynn,neutral1,neutral2
+"On Wednesday, February 8, the Washington Post’s Karen DeYoung came to visit Flynn for what was billed as an off-the-record interview.",Karen DeYoung,Flynn,neutral1,neutral2
+"On Wednesday, February 8, the Washington Post’s Karen DeYoung came to visit Flynn for what was billed as an off-the-record interview.",Karen DeYoung,Washington Post,neutral1,neutral1
+"It was another reason for Trump to distrust and hate the FBI, a pernicious tease that left them dangling.",Trump,the FBI,negative1,negative2
+"It was another reason for Trump to distrust and hate the FBI, a pernicious tease that left them dangling.",Trump,the FBI,negative1,negative2
+"It was another reason for Trump to distrust and hate the FBI, a pernicious tease that left them dangling.",Trump,the FBI,negative1,negative2
+"It was another reason for Trump to distrust and hate the FBI, a pernicious tease that left them dangling.",Trump,the FBI,negative1,negative2
+"Priebus tried to explain to Trump, who was waiting for a recanting.",Priebus,Trump,neutral1,neutral2
+Priebus called Andrew McCabe.,Priebus,Andrew McCabe,neutral1,neutral2
+Priebus practically ran to report to Trump the good news that the FBI would soon be shooting down the Times story.,Priebus,Trump,positive1,neutral1
+"“This is crazy,” Trump had told Priebus.",Trump,Priebus,neutral1,neutral2
+“Paul Manafort has got to call Trump . . . go see him face-to-face.,Paul Manafort,Trump,neutral1,neutral2
+“Paul Manafort should fire Manafort's lawyer.,Paul Manafort,Manafort's lawyer,negative1,negative1
+"“Manafort's lawyer told Manafort not to cooperate,” Manafort said.",Manafort's lawyer,Manafort,negative1,neutral2
+"“Manafort's lawyer told Manafort not to cooperate,” Manafort said.",Manafort's lawyer,Manafort,negative1,neutral1
+"“Manafort's lawyer told Manafort not to cooperate,” Manafort said.",Manafort's lawyer,Manafort,negative1,neutral2
+"“Manafort's lawyer told Manafort not to cooperate,” Manafort said.",Manafort's lawyer,Manafort,negative1,neutral1
+"“I thought Donald Trump took some real cheap shots at Paul Manafort,” Bannon said.",Donald Trump,Paul Manafort,negative1,negative1
+"“I really want to thank Steve Bannon for trying to step in,” Manafort said.",Manafort,Steve Bannon,positive1,positive1

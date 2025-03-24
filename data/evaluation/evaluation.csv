@@ -1,0 +1,9 @@
+dataset,sample_size,model,prompt,accuracy_detailed,krippendorff_detailed,bp_detailed,accuracy_simplified,krippendorff_simplified,bp_simplified
+./samples/random_sample.csv,50,gpt-4-turbo,new_prompt2.txt,60.0,0.4864,0.5333,76.0,0.641,0.68
+./samples/random_sample2.csv,50,gpt-4-turbo,new_prompt2.txt,36.0,0.1572,0.2533,66.0,0.3708,0.5467
+./samples/random_sample_long.csv,200,gpt-4-turbo,new_prompt2.txt,34.0,0.1339,0.23,70.5,0.4951,0.6067
+./samples/random_sample_1.csv,610,gpt-4-turbo,new_prompt2.txt,34.75,0.1409,0.2388,71.31,0.5043,0.6175
+./samples/random_sample_2.csv,600,gpt-4-turbo,new_prompt2.txt,33.17,0.1291,0.2203,64.83,0.4158,0.5311
+./samples/biographies_data.csv,75,gpt-4-turbo,new_prompt2.txt,34.67,0.199,0.2378,77.33,0.6625,0.6978
+./samples/muller_sample.csv,200,gpt-4-turbo,new_prompt2.txt,40.0,0.2395,0.3,69.0,0.533,0.5867
+./samples/newspapers_sample.csv,200,gpt-4-turbo,new_prompt2.txt,36.0,0.1713,0.2533,65.0,0.46,0.5333

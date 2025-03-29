@@ -23,7 +23,6 @@ def generate_filename(model_id,system_prompt_file,input_file):
 
     return f"{model_id}_{clean_prompt}_{clean_input}"
 
-
 def load_csv(filename):
     """Load sentences to label from a CSV file inside the data/samples/ folder."""
     filepath = os.path.join("..", "data", "samples", filename)
@@ -156,7 +155,7 @@ def save_results_to_csv(results, input_file, output_file):
     # Save the merged results to the output CSV
     output_filepath = os.path.join("..", "data", "api_output", output_file)
     merged_df.to_csv(output_filepath, index=False)
-    print(f"Results saved to {output_file}")
+    print(f"Results saved in {output_filepath}")
 
 def krippendorff_alpha(data, level="detailed"):
     """

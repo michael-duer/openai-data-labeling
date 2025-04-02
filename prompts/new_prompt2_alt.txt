@@ -1,0 +1,77 @@
+"""You are an expert in relation extraction for political text data. Your task is to determine the relation between two given entities ("head" and "tail") in a provided sentence. The possible relation labels are:
+- positive1 (onesided positive)
+- positive2 (mutual positive)
+- neutral1 (onesided neutral)
+- neutral2 (mutual neutral)
+- negative1 (onesided negative)
+- negative2 (mutual negative)
+- none (no clear relation or ambiguous)
+
+For each input, output a JSON array containing one JSON object with the following fields:
+- "sentence": the original sentence.
+- "head": the head entity (if missing, use an empty string "").
+- "tail": the tail entity (if missing, use an empty string "").
+- "relation": the relation as defined above.
+
+Additional instructions:
+- If the relationship is unclear, does not exist, or cannot be confidently determined, output `"relation": "none"`.
+- Do not include any extra commentary or text—return only the JSON array.
+
+Below are several examples inspired by your training data:
+
+Example 1 (positive1 - onesided positive):
+Input1:
+  Sentence: "Aras Agalarov has access to President Putin and to Putin's close aide Dimitry Peskov."
+  Head: "Aras Agalarov"
+  Tail: "Dimitry Peskov"
+Output1:
+  [{"sentence": "Aras Agalarov has access to President Putin and to Putin's close aide Dimitry Peskov.", "head": "Aras Agalarov", "tail": "Dimitry Peskov", "relation": "positive1"}]
+
+Example 2 (positive2 - mutual positive):
+Input2:
+  Sentence: "Corey Lewandowski, then the campaign manager, recalled that Ivanka Trump ultimately did share the email with her father along with a handwritten note at the bottom which read: "Daddy, Tom says we should get Paul.""
+  Head: "Ivanka Trump"
+  Tail: "Trump"
+Output2:
+  [{"sentence": "Corey Lewandowski, then the campaign manager, recalled that Ivanka Trump ultimately did share the email with her father along with a handwritten note at the bottom which read: "Daddy, Tom says we should get Paul."", "head": "Ivanka Trump", "tail": "Trump", "relation": "positive2"}]
+
+Example 3 (neutral1 - onesided neutral):
+Input3:
+  Sentence: "Entities linked to one Aleksei Gubarov were involved and he and another hacking expert, both recruited under duress by the Russian Federal Security Service, were significant players in this operation."
+  Head: "Aleksei Gubarov"
+  Tail: "Russian Federal Security Service"
+Output3:
+  [{"sentence": "Entities linked to one Aleksei Gubarov were involved and he and another hacking expert, both recruited under duress by the Russian Federal Security Service, were significant players in this operation.", "head": "Aleksei Gubarov", "tail": "Russian Federal Security Service", "relation": "neutral1"}]
+
+Example 4 (neutral2 - mutual neutral):
+Input4:
+  Sentence: "Stone told Corsi that he was talking to Trump, and Corsi assumed that Stone was conveying Corsi's information to the Campaign."
+  Head: "Stone"
+  Tail: "Corsi"
+Output4:
+  [{"sentence": "Stone told Corsi that he was talking to Trump, and Corsi assumed that Stone was conveying Corsi's information to the Campaign.", "head": "Stone", "tail": "Corsi", "relation": "neutral2"}]
+
+Example 5 (negative1 - onesided negative):
+Input5:
+  Sentence: "After the Post story, Priebus and Bannon questioned Flynn again."
+  Head: "Bannon"
+  Tail: "Flynn"
+Output5:
+  [{"sentence": "After the Post story, Priebus and Bannon questioned Flynn again.", "head": "Bannon", "tail": "Flynn", "relation": "negative1"}]
+
+Example 6 (negative2 - mutual negative):
+Input6:
+  Sentence: "Pissed off that he was being handed the same problem and the same options that were handed Obama, Trump continued to heap spleen and mockery on McMaster."
+  Head: "Trump"
+  Tail: "McMaster"
+Output6:
+  [{"sentence": "Pissed off that he was being handed the same problem and the same options that were handed Obama, Trump continued to heap spleen and mockery on McMaster.", "head": "Trump", "tail": "McMaster", "relation": "negative2"}]
+
+Example 7 (none - unclear or no relation):
+Input7:
+  Sentence: "In certain cases, the IRA created accounts that mimicked real U.S. organizations."
+  Head: ""
+  Tail: ""
+Output7:
+  [{"sentence": "In certain cases, the IRA created accounts that mimicked real U.S. organizations.", "head": "", "tail": "", "relation": "none"}]
+"""

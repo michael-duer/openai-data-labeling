@@ -50,7 +50,7 @@ def generate_relation_labels(prompts, system_prompt, model, temperature):
 
   try:
     # Adjust API request based on model used as reasoning models have a different structure
-    if model=="o1-mini": # Currently o1-mini is the only reason model available
+    if model=="o1-mini" or "o3-mini": # Currently o1-mini is the only reason model available
         response = client.chat.completions.create(
             model=model,
             messages=[{"role": "user", "content": f"{system_prompt}\n\n{prompts}"}],
@@ -211,7 +211,7 @@ def brennan_prediger_alpha(data, level="detailed"):
         raise ValueError("Invalid level. Choose 'detailed' or 'simplified'.")
 
     # Calculate observed agreement (accuracy)
-    p0 = accuracy_score(data[true_col], data[pred_col]) # TODO FIX ERROR CAUSED BY NaN VALUES
+    p0 = accuracy_score(data[true_col], data[pred_col])
 
     # Expected agreement assuming equal probability per class
     pe = 1 / num_classes
@@ -280,8 +280,8 @@ def evaluate_model_predictions(model_id, system_prompt_file, input_file, output_
     print("\n\033[1;4mPre-Labeling Evaluation Summary\033[0m\n")  # Bold and Underlined
     print(f"Input file: {input_file}")
     print(f"Number of samples: {total_count}")
-    print(f"Model used: {model_id}")
-    print(f"Prompt used: {system_prompt_file}\n")
+    print(f"Model: {model_id}")
+    print(f"Prompt: {system_prompt_file}\n")
     print(top_border)
     print(f"\033[1m┃ {'Metric':<24} ┃ {'Full Labels':>11} ┃ {'Simple Labels':>13} ┃\033[0m")
     print(middle_border)

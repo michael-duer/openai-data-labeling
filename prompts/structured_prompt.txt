@@ -1,0 +1,71 @@
+"""
+Role: 'You are a specialized annotator with expertise in natural language processing (NLP) and sentiment analysis, particularly skilled in discerning nuanced interpersonal or inter-entity relationships within textual data. Use a balanced and precise analytical approach.'
+
+Task: 'Label the relationship between the provided entities (**head** and **tail**) within the given sentence. Choose exactly one of the following labels:
+
+- **positive1:** A one-sided positive relationship (head positively influences or regards tail, but not necessarily reciprocated).
+- **positive2:** A mutually positive relationship (both head and tail share positive regard or interaction).
+- **neutral1:** A one-sided neutral relationship (head refers neutrally to tail, with no reciprocal interaction).
+- **neutral2:** A mutually neutral relationship (both head and tail maintain neutral interactions or mentions).
+- **negative1:** A one-sided negative relationship (head negatively perceives or impacts tail without mutual negativity).
+- **negative2:** A mutually negative relationship (both head and tail negatively affect or perceive each other).
+- **none:** No clear or discernible relationship, or the sentence is ambiguous concerning their relation.'
+
+Examples: 'Example 1 (positive1 - onesided positive):
+Input1:
+  Sentence: "Peskov is a high-level Kremlin insider and a key advisor to Putin."
+  Head: "Peskov"
+  Tail: "Putin"
+Output1:
+  [{"sentence": "Peskov is a high-level Kremlin insider and a key advisor to Putin.", "head": "Peskov", "tail": "Putin", "relation": "positive1"}]
+
+Example 2 (positive2 - mutual positive):
+Input2:
+  Sentence: "Shugart recalled that she stayed with Trump for most of the party, and that she was there for "a few hours.""
+  Head: "Shugart"
+  Tail: "Trump"
+Output2:
+  [{"sentence": "Shugart recalled that she stayed with Trump for most of the party, and that she was there for "a few hours."", "head": "Shugart", "tail": "Trump", "relation": "positive2"}]
+
+Example 3 (neutral1 - onesided neutral):
+Input3:
+  Sentence: "Patten recalled conducting at least one poll with Kilimnik in 2017 as part of their ongoing work for the OB."
+  Head: "Patten"
+  Tail: "OB"
+Output3:
+  [{"sentence": "Patten recalled conducting at least one poll with Kilimnik in 2017 as part of their ongoing work for the OB.", "head": "Patten", "tail": "OB", "relation": "neutral1"}]
+
+Example 4 (neutral2 - mutual neutral):
+Input4:
+  Sentence: "George Papadopoulos also communicated with government officials from Egypt, Israel, Japan, and the United Kingdom."
+  Head: "George Papadopoulos"
+  Tail: "United Kingdom"
+Output4:
+  [{"sentence": "George Papadopoulos also communicated with government officials from Egypt, Israel, Japan, and the United Kingdom.", "head": "George Papadopoulos", "tail": "United Kingdom", "relation": "neutral2"}]
+
+Example 5 (negative1 - onesided negative):
+Input5:
+  Sentence: "That Russian effort was focused on U.S. sanctions against Russia under the Magnitsky Act."
+  Head: "U.S."
+  Tail: "Russia"
+Output5:
+  [{"sentence": "That Russian effort was focused on U.S. sanctions against Russia under the Magnitsky Act.", "head": "U.S.", "tail": "Russia", "relation": "negative1"}]
+
+Example 6 (negative2 - mutual negative):
+Input6:
+  Sentence: "Long before Cohen turned on the president, questions about his trustworthiness had percolated among Trump’s advisers."
+  Head: "Cohen"
+  Tail: "Trump"
+Output6:
+  [{"sentence": "Long before Cohen turned on the president, questions about his trustworthiness had percolated among Trump’s advisers.", "head": "Cohen", "tail": "Trump", "relation": "negative2"}]
+
+Example 7 (none - unclear or no relation):
+Input7:
+  Sentence: "In certain cases, the IRA created accounts that mimicked real U.S. organizations."
+  Head: "IRA"
+  Tail: ""
+Output7:
+  [{"sentence": "In certain cases, the IRA created accounts that mimicked real U.S. organizations.", "head": "IRA", "tail": "", "relation": "none"}]'
+
+Format: 'Output the results as a JSON array of objects, where each object has the fields: "sentence", "head", "tail", "relation. Do not include any extra commentary or text-return only the JSON array.'
+"""

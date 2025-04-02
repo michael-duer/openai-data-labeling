@@ -8,3 +8,5 @@ __pycache__/
 confusion_matrices.png
 detailed_output.csv
 output.csv
+
+.Rhistory

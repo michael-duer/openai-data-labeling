@@ -41,13 +41,15 @@ This repository contains scripts which use the OpenAI API to label relationships
 ## Requirements
 
 - **Python:** Version 3.13 or later.
-  
+
   Needed packages are listed in `requirements.txt`.
+
 - **R** (only needed for creating samples and evaluating the output files)
-  
+
   Needed packages are: `dplyr`, `ggplot2`, `gridExtra` and `grid`.
+
 - **OpenAI API Access**
-  
+
   Obtain an API key from the [OpenAI API Platform](https://platform.openai.com/api-keys).
 
 ## Setup
@@ -66,7 +68,7 @@ cd openai-data-labeling
 ```
 
 3. **Configure API Key**
-   
+
    Rename the provided `.env.example` file to `.env` and replace the placeholder with your actual OpenAI API key:
 
 ```env
@@ -76,10 +78,11 @@ OPENAI_API_KEY = your_openai_api_key
 ## Usage
 
 1. **Prepare Input Data**
-   
+
    Place a CSV file containing sentences in the `data/samples/` folder. The file should include the fields: `sentence`, `head`, `tail`, and `relation`. You may also use one of the provided samples.
-3. **Configure the Script**
-   
+
+2. **Configure the Script**
+
    In `scripts/run.py`, adjust the following parameters:
 
    - **model_id**: The OpenAI model identifier (e.g., `gpt-4-turbo`).
@@ -87,7 +90,7 @@ OPENAI_API_KEY = your_openai_api_key
    - **input_file**: The CSV file name with the input sentences.
    - **Batch Size**: Modify the batch size in the `generate_prompts()` function based on the token limits of your chosen model.
 
-4. **Run the Labeling Process**
+3. **Run the Labeling Process**
 
 ```bash
  cd scripts

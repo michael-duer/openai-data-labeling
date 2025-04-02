@@ -1,13 +1,19 @@
 library(dplyr)
 
-setwd("~/GitHub/openai-data-labeling/create testsets")
+# This script cleans up the relationship categories in the TrainingData.csv file 
+# and creates several samples based on that file that can be used as test sets to 
+# test the labeling performance of the OpenAI API.
+
+setwd("~/Documents/GitHub/openai-data-labeling/scripts")
 
 # Load file to create testsets from
-data <- read.csv("TrainingData_manually_adjusted.csv",sep = ",")
+data <- read.csv("../data/TrainingData.csv",sep = ",")
 
 #--------------------------#
 #### Clean type2 values ####
 #--------------------------#
+
+# Standardize relationship categories (type2)
 
 data_adjusted_types <- data %>%
   mutate(type2= case_when(

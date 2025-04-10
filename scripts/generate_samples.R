@@ -44,25 +44,54 @@ clean_data <- data_adjusted_types %>%
   filter(!is.na(head) & !is.na(tail) & type2 %in% allowed_types) %>%
   select(sentID, sentence = sentence_fixed,head,tail,relation = type2)
 
-#--------------------------#
-#### Create sample sets ####
-#--------------------------#
+#-----------------------#
+#### Helper Function ####
+#-----------------------#
 
-# Select 50 random rows
 set.seed(42)  # Set a seed for reproducibility
-random_sample_small <- clean_data %>%
-  slice_sample(n=50) %>%
-  select(-sentID)
 
-# Export as csv file
-write.csv(random_sample_small_2,"random_sample_small_2.csv", row.names = FALSE)
+# Create and save non-overlapping random samples from a data frame
+create_samples <- function(data, 
+                           n_samples, 
+                           sample_size, 
+                           file_prefix = "random_sample_",
+                           sample_index_offset = 0) {
+  
+  # Validate that input data is big enough
+  rows_needed <- n_samples * sample_size
+  if(nrow(data) < rows_needed) {
+    stop("Not enough rows in input data to create the requested number of samples.")
+  }  
+  
+  # Shuffle and truncate the dataset
+  shuffled_data <- data %>%
+    slice_sample(prop = 1) %>%
+    slice(1:rows_needed)
+  
+  # Split into non-overlapping samples
+  sample_sets <- split(shuffled_data, gl(n_samples, sample_size))
+  
+  # Save each sample to a csv file
+  for (i in seq_along(sample_sets)) {
+    # Use an offset value to avoid overwriting existing samples
+    file_name <- paste0(file_prefix, i + sample_index_offset, ".csv") 
+    write.csv(sample_sets[[i]], file_name, row.names = FALSE)
+  }
+}
 
-# Select 200 random rows
-random_sample_long <- clean_data %>%
-  slice_sample(n=200) %>%
-  select(-sentID)
+#------------------------------------#
+##### Create random sample sets ######
+#------------------------------------#
 
-write.csv(random_sample_long,"random_sample_long.csv", row.names = FALSE)
+# Create small sample sets (n=50)
+create_samples(clean_data, 10, 50, file_prefix = "random_sample_small_", sample_index_offset = 2)
+
+# Create large samples (n=500)
+create_samples(clean_data, 2, 500, sample_index_offset = 10)
+
+#------------------------------------------------------------#
+#### Create samples from the beginning and end of dataset ####
+#------------------------------------------------------------#
 
 # Select 50 random rows from the first 200 rows
 random_sample_beginning <- clean_data %>%
@@ -79,24 +108,6 @@ random_sample_end <- clean_data %>%
   select(-sentID)
 
 write.csv(random_sample_end,"random_sample_end.csv", row.names = FALSE)
-
-#---------------------------------------#
-##### Create 10 random sample sets ######
-#---------------------------------------#
-
-shuffled_data <- clean_data %>%
-  slice_sample(prop=1)  %>% # Shuffle dataset
-  select(-sentID)
-
-# Split data into 10 non-overlapping samples
-sample_sets <- split(shuffled_data, rep(1:10, each=200, length.out=nrow(shuffled_data)))
-
-# Save each sample set as a CSV file
-for (i in seq_along(sample_sets)) {
-  write.csv(sample_sets[[i]], paste0("random_sample_", i, ".csv"))
-}
-
-print(sample_sets[1])
 
 #---------------------------------------------#
 ##### Create sample sets based on source ######

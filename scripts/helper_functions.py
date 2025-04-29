@@ -50,12 +50,11 @@ def generate_relation_labels(prompts, system_prompt, model, temperature):
 
   try:
     # Adjust API request based on model used as reasoning models have a different structure
-    if model=="o1-mini" or "o3-mini": # Currently o1-mini is the only reason model available
+    if model=="o1-mini" or "o3-mini":
         response = client.chat.completions.create(
-            model=model,
-            messages=[{"role": "user", "content": f"{system_prompt}\n\n{prompts}"}],
-            #temperature=temperature,
-            #max_tokens=5000
+            model = model,
+            #reasoning_effort = "low", # Possible options: low, medium, high
+            messages = [{"role": "user", "content": f"{system_prompt}\n\n{prompts}"}],
         )
         text_response = response.choices[0].message.content.strip()
         # If the response is wrapped in markdown formatting (```json), clean it.
@@ -70,6 +69,7 @@ def generate_relation_labels(prompts, system_prompt, model, temperature):
                 {"role": "user", "content": prompts}
             ],
             temperature=temperature, # Lower temperature for better accuracy
+            #top_p=0,
             )
         # Clean response if it is not well formatted (starts with "```json" and ends with "```")
         if response.choices[0].message.content.startswith("```json"):
@@ -85,13 +85,29 @@ def generate_prompts(data, batch_size=5):
     """Generate prompts by bundling sentences into batches."""
     prompts = []
     base_prompt = """
-        Please pre-label the following data. Each input consists of:
-        Sentence: <text>
-        Head: <head entity>
-        Tail: <tail entity>
+        Please label the provided sentences according to the relation categories defined above. 
+        For each sentence, clearly identify the relation between "head" and "tail" entities.
+        Provide your response strictly as a JSON array of objects:
+        [
+            {
+                "sentence": "<original sentence>",
+                "head": "<head entity or empty string>",
+                "tail": "<tail entity or empty string>",
+                "relation": "<relation label as defined above>"
+            },
+            ...
+        ]
 
-        Determine the relation between the head and tail in each sentence and output the results as a JSON array of objects, where each object has the fields: "sentence", "head", "tail", "relation".
+        Do not provide any additional commentary or explanations.
         """
+    # base_prompt = """
+    #     Please pre-label the following data. Each input consists of:
+    #     Sentence: <text>
+    #     Head: <head entity>
+    #     Tail: <tail entity>
+
+    #     Determine the relation between the head and tail in each sentence and output the results as a JSON array of objects, where each object has the fields: "sentence", "head", "tail", "relation".
+    #     """
     # base_prompt = (
     #         "Please label the relationships for the following entries according to the instructions provided above. "
     #         "For each entry, determine the relationship (choose one from Positive1, Positive2, Neutral1, Neutral2, Negative1, Negative2, none) "

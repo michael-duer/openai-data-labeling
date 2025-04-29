@@ -1,4 +1,5 @@
 library(dplyr)
+library(tidyr)
 library(ggplot2)
 library(gridExtra)
 library(grid)
@@ -11,15 +12,20 @@ setwd("~/Documents/GitHub/openai-data-labeling/scripts")
 # Load file to create testsets from
 data <- read.csv("../data/evaluation/evaluation.csv",sep = ",")
 
-# TODO: Remove after testing
-sample1 <- read.csv("../data/samples/random_sample_1.csv",sep = ",")
-output_sample1 <- read.csv("../data/api_output/detailed_output_gpt-4.5-preview-2025-02-27_new_prompt2_random_sample_1.csv",sep = ",")
-
 # Compare sample
-prompt_comparison <- c("new_prompt2.txt","structured_prompt.txt")
+sample_comparison <- c("random_sample_small_3.csv","random_sample_small_4.csv",
+                       "random_sample_small_5.csv","random_sample_small_6.csv",
+                       "random_sample_small_7.csv","random_sample_small_8.csv",
+                       "random_sample_small_9.csv","random_sample_small_10.csv",
+                       "random_sample_small_11.csv","random_sample_small_12.csv")
+prompt_comparison <- c("refined_prompt3.txt","refined_prompt3_alt.txt")
 sample_small1 <- data %>%
-  filter(dataset=="random_sample_small_1.csv") %>%
-  #filter(prompt %in% prompt_comparison) %>%
+  #filter(dataset %in% sample_comparison) %>%
+  filter(dataset=="random_sample_small_3.csv") %>%
+  #filter(dataset=="synthetic_sample.csv") %>%
+  filter(prompt %in% prompt_comparison) %>%
+  filter(model=="o1-mini") %>%
+  #filter(model!="gpt-3.5-turbo") %>%
   group_by(model, prompt) %>%
   slice_tail(n = 1)
 
@@ -51,6 +57,155 @@ grid.arrange(
   ncol = 2,
   top = textGrob("Accuracy vs Krippendorff's Alpha", gp = gpar(fontsize = 16, fontface = "bold"))
 )
+
+## Statistics comparison on 10 sample sets
+sample_small_summary <- data %>%
+  mutate(row_id = row_number()) %>% # Add ID to later keep the latest observation
+  filter(dataset %in% sample_comparison) %>%
+  filter(model %in% c("o1-mini","o3-mini","gpt-4.5-preview-2025-02-27","gpt-4-turbo")) %>%
+  filter(prompt == "refined_prompt3.txt") %>%
+  group_by(model, prompt, dataset) %>%
+  slice_max(order_by = row_id, n = 1) %>%
+  ungroup() %>%
+  select(-dataset, -sample_size, -row_id) %>%
+  group_by(model, prompt) %>%
+  summarise(across(
+    .cols = names(.)[3:ncol(.)],  # skip the first two columns (model, prompt)
+    .fns = list(mean = mean, var = var), # calculate mean and variance for all columns
+    .names = "{.col}_{.fn}" # name new columns indicating mean/variance
+  ))
+
+sample_small_summary_long <- sample_small_summary %>%
+  select(model, ends_with("_var")) %>%
+  pivot_longer(cols = ends_with("_var"),
+               names_to = "metric",
+               values_to = "variance")
+
+## TODO: Create Histograms
+ggplot(sample_small_summary_long, aes(x = variance)) +
+  geom_histogram(binwidth = 1, fill = "steelblue", color = "white") +
+  labs(title = "Histogram of Metric Variances Across Models",
+       x = "Variance",
+       y = "Count") +
+  theme_minimal()
+# Facet by metric
+ggplot(sample_small_summary_long, aes(x = variance)) +
+  geom_histogram(binwidth = 1, fill = "steelblue", color = "white") +
+  facet_wrap(~ metric, scales = "free") +
+  labs(title = "Variance per Metric", x = "Variance", y = "Count") +
+  theme_minimal()
+# Facet by model
+ggplot(sample_small_summary_long, aes(x = variance)) +
+  geom_histogram(binwidth = 1, fill = "steelblue", color = "white") +
+  facet_wrap(~ model) +
+  labs(title = "Variance Distribution per Model",
+       x = "Variance",
+       y = "Count") +
+  theme_minimal()
+
+# Combine data from 10 samples (n=50) and 4 AI Models
+model_comparison <- data %>%
+  mutate(row_id = row_number()) %>% # Add ID to later keep the latest observation
+  filter(dataset %in% sample_comparison,
+         model %in% c("gpt-4.1","gpt-4.1-mini","gpt-4.1-nano"),
+         #model %in% c("o1-mini","o3-mini","gpt-4.5-preview-2025-02-27","gpt-4-turbo"),
+         prompt == "refined_prompt3.txt") %>%
+  group_by(model, prompt, dataset) %>%
+  slice_max(order_by = row_id, n = 1) %>%
+  ungroup()
+
+model_comparison_big <- data %>%
+  mutate(row_id = row_number()) %>% # Add ID to later keep the latest observation
+  filter(dataset %in% c("random_sample_11.csv", "random_sample_12.csv"),
+         model %in% c("gpt-4.1","gpt-4.1-mini","gpt-4.1-nano"),
+         #model %in% c("o1-mini","o3-mini","gpt-4.5-preview-2025-02-27","gpt-4-turbo"),
+         prompt == "refined_prompt3.txt") %>%
+  group_by(model, prompt, dataset) %>%
+  slice_max(order_by = row_id, n = 1) %>%
+  ungroup()
+# Calculate the means separatly
+means <- model_comparison %>%
+  group_by(model) %>%
+  summarise(mean_acc_det = mean(accuracy_detailed),
+            mean_acc_sim = mean(accuracy_simplified),
+            mean_kripp_det = mean(krippendorff_detailed),
+            mean_kripp_sim = mean(krippendorff_simplified))
+
+means_500 <- data %>%
+  filter(dataset %in% c("random_sample_11.csv", "random_sample_12.csv"),
+         model %in% c("gpt-4.1","gpt-4.1-mini","gpt-4.1-nano"),
+         #model %in% c("o1-mini", "o3-mini", "gpt-4.5-preview-2025-02-27", "gpt-4-turbo"),
+         prompt == "refined_prompt3.txt") %>%
+  group_by(model, dataset) %>%
+  slice_max(order_by = row_number(), n = 1) %>%
+  group_by(model) %>%
+  summarise(mean500_acc_det = mean(accuracy_detailed),
+            mean500_acc_sim = mean(accuracy_simplified),
+            mean500_kripp_det = mean(krippendorff_detailed),
+            mean500_kripp_sim = mean(krippendorff_simplified))
+
+
+
+# Histogram Accuracy detailed 
+ggplot(model_comparison, aes(x = accuracy_detailed)) +
+  geom_histogram(binwidth = 1, fill = "steelblue", color = "white") +
+  geom_histogram(data = model_comparison_big,aes(x = accuracy_detailed),
+                 binwidth = 1,fill = "orange",color = "white") +
+  facet_wrap(~ model, ncol = 1) +
+  geom_vline(data = means, aes(xintercept = mean_acc_det), 
+             color = "red", linetype = "dashed", linewidth = 1) +
+  geom_vline(data = means_500, aes(xintercept = mean500_acc_det),
+             color = "limegreen", linetype = "dashed", linewidth = 1) +
+  coord_cartesian(xlim = c(0, 100)) +
+  labs(title = "Accuracy Distribution across 10 Samples (detailed labels)",
+       x = "Accuracy in %",
+       y = "Number of samples") +
+  theme_minimal()
+# Histogram Accuracy simplified 
+ggplot(model_comparison, aes(x = accuracy_simplified)) +
+  geom_histogram(binwidth = 1, fill = "steelblue", color = "white") +
+  geom_histogram(data = model_comparison_big,aes(x = accuracy_simplified),
+                 binwidth = 1,fill = "orange",color = "white") +
+  facet_wrap(~ model, ncol = 1) +
+  geom_vline(data = means, aes(xintercept = mean_acc_sim), 
+             color = "red", linetype = "dashed", linewidth = 1) +
+  geom_vline(data = means_500, aes(xintercept = mean500_acc_sim),
+             color = "limegreen", linetype = "dashed", linewidth = 1) +
+  coord_cartesian(xlim = c(0, 100)) +
+  labs(title = "Accuracy Distribution across 10 Samples (simplified labels)",
+       x = "Accuracy in %",
+       y = "Number of samples") +
+  theme_minimal()
+# Histogram Accuracy detailed 
+ggplot(model_comparison, aes(x = krippendorff_detailed)) +
+  geom_histogram(binwidth = 0.05, fill = "steelblue", color = "white") +
+  geom_histogram(data = model_comparison_big,aes(x = krippendorff_detailed),
+                 binwidth = 0.05,fill = "orange",color = "white") +
+  facet_wrap(~ model, ncol = 1) +
+  geom_vline(data = means, aes(xintercept = mean_kripp_det), 
+             color = "red", linetype = "dashed", linewidth = 1) +
+  geom_vline(data = means_500, aes(xintercept = mean500_kripp_det),
+             color = "limegreen", linetype = "dashed", linewidth = 1) +
+  coord_cartesian(xlim = c(0, 1)) +
+  labs(title = "Krippendorff's Alpha Distribution across 10 Samples (detailed labels)",
+       x = "Accuracy in %",
+       y = "Number of samples") +
+  theme_minimal()
+# Histogram Accuracy detailed 
+ggplot(model_comparison, aes(x = krippendorff_simplified)) +
+  geom_histogram(binwidth = 0.05, fill = "steelblue", color = "white") +
+  geom_histogram(data = model_comparison_big,aes(x = krippendorff_simplified),
+                 binwidth = 0.05,fill = "orange",color = "white") +
+  facet_wrap(~ model, ncol = 1) +
+  geom_vline(data = means, aes(xintercept = mean_kripp_sim), 
+             color = "red", linetype = "dashed", linewidth = 1) +
+  geom_vline(data = means_500, aes(xintercept = mean500_kripp_sim),
+             color = "limegreen", linetype = "dashed", linewidth = 1) +
+  coord_cartesian(xlim = c(0, 1)) +
+  labs(title = "Krippendorff's Alpha Distribution across 10 Samples (simplified labels)",
+       x = "Accuracy in %",
+       y = "Number of samples") +
+  theme_minimal()
 
 # Create a plot consisting of a subplot for accuracy, k alpha and bp alpha
 # Axis: x count, y element

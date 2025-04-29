@@ -80,11 +80,8 @@ def generate_relation_labels(prompts, system_prompt, model, temperature):
   except Exception as e:
       print(f"Error: {e}")
       return None
-
-def generate_prompts(data, batch_size=5):
-    """Generate prompts by bundling sentences into batches."""
-    prompts = []
-    base_prompt = """
+  
+user_prompt_unidirectional = """
         Please label the provided sentences according to the relation categories defined above. 
         For each sentence, clearly identify the relation between "head" and "tail" entities.
         Provide your response strictly as a JSON array of objects:
@@ -100,34 +97,40 @@ def generate_prompts(data, batch_size=5):
 
         Do not provide any additional commentary or explanations.
         """
-    # base_prompt = """
-    #     Please pre-label the following data. Each input consists of:
-    #     Sentence: <text>
-    #     Head: <head entity>
-    #     Tail: <tail entity>
 
-    #     Determine the relation between the head and tail in each sentence and output the results as a JSON array of objects, where each object has the fields: "sentence", "head", "tail", "relation".
-    #     """
-    # base_prompt = (
-    #         "Please label the relationships for the following entries according to the instructions provided above. "
-    #         "For each entry, determine the relationship (choose one from Positive1, Positive2, Neutral1, Neutral2, Negative1, Negative2, none) "
-    #         "between the given 'head' and 'tail' based on the 'sentence'. "
-    #         "Return your answer as a JSON array where each element is an object with keys 'sentence', 'head', 'tail', and 'relation'. "
-    #         "Do not include any additional text.\n"
-    #     )
-    # base_prompt = (
-    #     "Please label the relationships in the following sentences. The relationships are one of Positive1, Positive2, Neutral1, Neutral2, Negative1, Negative2 or None. The number indicates if the relation ship is one-sided (1) or mutual (2). "
-    #     "Provide the result in JSON format with fields 'sentence', 'head', 'tail', and 'relation'.\n"
-    #     )
+user_prompt_bidirectional = """
+    Please label the provided sentences according to the relation categories defined above.
+    For each sentence, clearly identify:
+    - the relation from "head" to "tail"
+    - and the relation from "tail" to "head".
+
+    Provide your response strictly as a JSON array of objects:
+    [
+        {
+            "sentence": "<original sentence>",
+            "head": "<head entity or empty string>",
+            "tail": "<tail entity or empty string>",
+            "rel_head_tail": "<relation label head → tail>",
+            "rel_tail_head": "<relation label tail → head>"
+        },
+        ...
+    ]
+
+    Do not provide any additional commentary or explanations.
+    """
+def generate_prompts(user_prompt, data, batch_size=5):
+    """Generate prompts by bundling sentences into batches."""
+    prompts = []
+    
     for i in range(0, len(data), batch_size):
         batch = data[i:i+batch_size]
-        prompt = base_prompt
+        prompt = user_prompt
         for item in batch:
             prompt += f"\nSentence: {item['sentence']}\nHead: {item['head']}\nTail: {item['tail']}\n"
         prompts.append(prompt)
     return prompts
 
-def save_results_to_csv(results, input_file, output_file):
+def save_results_to_csv(results, input_file, output_file, bidirectional=False):
     """
     Save labeled results to a CSV file, including true relations from the input file.
 
@@ -143,53 +146,74 @@ def save_results_to_csv(results, input_file, output_file):
     results_df = pd.DataFrame(results)
 
     # Merge results with true relations based on sentence, head, and tail
-    merged_df = pd.merge(
-        results_df, 
-        input_data[["sentence", "head", "tail", "relation"]], 
-        on=["sentence", "head", "tail"],
-        how="left"
-    )
-    # Rename columns for clarity
-    merged_df.rename(columns={"relation_x": "relation_predicted","relation_y": "relation_true"}, inplace=True)
+    if bidirectional:
+        merged_df = pd.merge(
+            results_df,
+            input_data[["sentence", "head", "tail", "rel_head_tail", "rel_tail_head"]],
+            on=["sentence", "head", "tail"],
+            how="left"
+        )
+        merged_df.rename(columns={
+            "rel_head_tail": "relation_predicted_head_tail",
+            "rel_tail_head": "relation_predicted_tail_head",
+            "relation_head_tail": "relation_true_head_tail",
+            "relation_tail_head": "relation_true_tail_head"
+        }, inplace=True)
+        missing_true = merged_df["rel_true_head_tail"].isna() | merged_df["rel_true_tail_head"].isna()
+    else:
+        merged_df = pd.merge(
+            results_df,
+            input_data[["sentence", "head", "tail", "relation"]],
+            on=["sentence", "head", "tail"],
+            how="left"
+        )
+        # Rename columns for clarity
+        merged_df.rename(columns={"relation_x": "relation_predicted","relation_y": "relation_true"}, inplace=True)
+        missing_true = merged_df["relation_true"].isna()
 
     # Sometimes the api removes punctuation from the sentences resulting in missing values after the merge.
     # To solve this issue, we identify the NA values and perform a fuzzy match to find the correct sentence, and add the missing true labels 
-    missing_true = merged_df["relation_true"].isna()
+    #missing_true = merged_df["relation_true_head_tail"].isna() | merged_df["relation_true_tail_head"].isna()
     # Helper function to find best match only when needed
-    def fuzzy_match_missing_rows(row, reference_df):
+    def fuzzy_match(row, reference_df, bidirectional):
         """Find best sentence match and fill missing relation."""
         match, score = process.extractOne(row["sentence"], reference_df["sentence"].tolist(), score_cutoff=90)
         if match:
-            return reference_df.loc[reference_df["sentence"] == match, "relation"].values[0]
-        return None
+            matched_row = reference_df.loc[reference_df["sentence"] == match]
+            if bidirectional:
+                return pd.DataFrame([
+                    matched_row["rel_head_tail"].values[0],
+                    matched_row["rel_tail_head"].values[0]
+                ])
+            else:
+                return matched_row["relation"].values[0]
+        return pd.DataFrame([None, None]) if bidirectional else None
 
     # Fill missing values using fuzzy matching
-    merged_df.loc[missing_true, "relation_true"] = merged_df[missing_true].apply(
-        lambda row: fuzzy_match_missing_rows(row, input_data), axis=1
-    )
+    if bidirectional:
+        merged_df.loc[missing_true, ["rel_true_head_tail", "rel_true_tail_head"]] = merged_df[missing_true].apply(
+            lambda row: fuzzy_match(row, input_data, bidirectional=True), axis=1
+        )
+    else:
+        merged_df.loc[missing_true, "relation_true"] = merged_df[missing_true].apply(
+            lambda row: fuzzy_match(row, input_data, bidirectional=False), axis=1
+        )
 
     # Save the merged results to the output CSV
     output_filepath = os.path.join("..", "data", "api_output", output_file)
     merged_df.to_csv(output_filepath, index=False)
     print(f"Results saved in {output_filepath}")
 
-def krippendorff_alpha(data, level="detailed"):
+def krippendorff_alpha(data, column_true, column_predicted):
     """
     Computes Krippendorff's alpha for inter-rater agreement.
     
     Parameters:
         data (pd.DataFrame): DataFrame containing true and predicted relations.
-        level (str): "detailed" for fine-grained labels, "simplified" for mapped categories.
-
     Returns:
         float: Krippendorff's alpha value.
     """
-    if level == "detailed":
-        values = data[["relation_true", "relation_predicted"]]
-    elif level == "simplified":
-        values = data[["relation_true_simplified", "relation_predicted_simplified"]]
-    else:
-        raise ValueError("Invalid level. Choose 'detailed' or 'simplified'.")
+    values = data[[column_true, column_predicted]]
 
     # Convert categorical labels to numeric encoding
     unique_labels = pd.unique(values.values.ravel()) # Extract unique label categories
@@ -206,7 +230,7 @@ def krippendorff_alpha(data, level="detailed"):
     alpha = krippendorff.alpha(reliability_data=values, level_of_measurement='nominal')
     return round(alpha, 4)
 
-def brennan_prediger_alpha(data, level="detailed"):
+def brennan_prediger_alpha(data, column_true, column_predicted, level="detailed"):
     """
     Computes Brennan-Prediger's alpha for inter-rater agreement.
     
@@ -218,16 +242,14 @@ def brennan_prediger_alpha(data, level="detailed"):
         float: Brennan-Prediger's alpha value.
     """
     if level == "detailed":
-        true_col, pred_col = "relation_true", "relation_predicted"
         num_classes = 7 # positive1, positive2, neutral1, neutral2, negative1, negative2, none
     elif level == "simplified":
-        true_col, pred_col = "relation_true_simplified", "relation_predicted_simplified"
         num_classes = 4 # positive, neutral, negative, none
     else:
         raise ValueError("Invalid level. Choose 'detailed' or 'simplified'.")
 
     # Calculate observed agreement (accuracy)
-    p0 = accuracy_score(data[true_col], data[pred_col])
+    p0 = accuracy_score(data[column_true], data[column_predicted])
 
     # Expected agreement assuming equal probability per class
     pe = 1 / num_classes
@@ -237,7 +259,7 @@ def brennan_prediger_alpha(data, level="detailed"):
 
     return round(alpha_bp, 4)
 
-def evaluate_model_predictions(model_id, system_prompt_file, input_file, output_file):
+def evaluate_model_predictions(model_id, system_prompt_file, input_file, output_file, bidirectional=False):
     """
     Evaluates the model's predictions against the true values in the output file.
     """
@@ -281,11 +303,11 @@ def evaluate_model_predictions(model_id, system_prompt_file, input_file, output_
     accuracy_simplified = round((correct_simplified_count / total_count) * 100, 2)
 
     # Compute Krippendorf's Alpha
-    alpha_detailed = krippendorff_alpha(data, level="detailed")
-    alpha_simplified = krippendorff_alpha(data, level="simplified")
+    alpha_detailed = krippendorff_alpha(data, "relation_true", "relation_predicted")
+    alpha_simplified = krippendorff_alpha(data,"relation_true_simplified", "relation_predicted_simplified")
     # Compute Brennan-Prediger Alpha
-    alpha_bp_detailed = brennan_prediger_alpha(data, level="detailed")
-    alpha_bp_simplified = brennan_prediger_alpha(data, level="simplified")
+    alpha_bp_detailed = brennan_prediger_alpha(data, "relation_true", "relation_predicted", level="detailed")
+    alpha_bp_simplified = brennan_prediger_alpha(data, "relation_true_simplified", "relation_predicted_simplified", level="simplified")
 
     # Print evaluation to console
     # Define table borders and formatting

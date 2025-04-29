@@ -1,0 +1,53 @@
+sentence,head,tail,relation_predicted,relation_true
+Trump hates Obama.,Trump,Obama,negative1,negative1
+Obama is hated by Trump.,Obama,Trump,negative1,negative1
+Trump said: “I hate Obama.”,Trump,Obama,negative1,negative1
+"“I hate Obama,” said Trump.",Obama,Trump,none,negative1
+Trump said he hated Obama.,Trump,Obama,negative1,negative1
+"He hated Obama, Trump said.",Obama,Trump,none,negative1
+Trump said: “Obama is an idiot”.,Trump,Obama,negative1,negative1
+Trump said that Obama is an idiot.,Trump,Obama,negative1,negative1
+Trump is an Obama-hater.,Trump,Obama,negative1,negative1
+Trump is Obama’s enemy.,Trump,Obama,negative1,negative1
+Trump talks derisively about Obama.,Trump,Obama,negative1,negative1
+Trump is Obama’s worst neighbor.,Trump,Obama,negative1,negative1
+Trump loves Obama.,Trump,Obama,positive1,positive1
+Obama is loved by Trump.,Obama,Trump,positive1,positive1
+"Trump said: ""I love Obama.""",Trump,Obama,positive1,positive1
+"""I love Obama,"" said Trump.",Obama,Trump,positive1,positive1
+Trump said he loved Obama.,Trump,Obama,positive1,positive1
+"He loved Obama, Trump said.",Obama,Trump,positive1,positive1
+"Trump said: ""Obama is wonderful.""",Trump,Obama,positive1,positive1
+Trump said that Obama is wonderful.,Trump,Obama,positive1,positive1
+Trump is Obama’s admirer.,Trump,Obama,positive1,positive1
+Trump is Obama’s favorite.,Trump,Obama,positive1,positive1
+Trump talks fondly about Obama.,Trump,Obama,positive1,positive1
+Trump is one of Obama’s most loyal neighbors.,Trump,Obama,positive1,positive1
+Trump sent Obama an e-mail.,Trump,Obama,neutral1,neutral1
+Obama received an e-mail from Trump.,Obama,Trump,neutral1,neutral1
+Trump said: “I sent an e-mail to Obama.”,Trump,Obama,neutral1,neutral1
+"“I sent an e-mail to Obama,” said Trump.",Obama,Trump,neutral1,neutral1
+Trump said he sent an e-mail to Obama.,Trump,Obama,neutral1,neutral1
+"He sent an e-mail to Obama, Trump said.",Obama,Trump,neutral1,neutral1
+Trump said: �Obama is in the garden.�,Trump,Obama,neutral1,none
+Trump said that Obama is in the garden.,Trump,Obama,neutral1,none
+Trump and Obama like each other.,Trump,Obama,positive2,positive2
+Trump and Obama cooperate at work.,Trump,Obama,positive2,positive2
+Trump and Obama have a cordial relationship.,Trump,Obama,positive2,positive2
+Trump and Obama have a bad relationship,Trump,Obama,negative2,negative2
+Trump and Obama are friends.,Trump,Obama,positive2,positive2
+Trump and Obama are enemies.,Trump,Obama,negative2,negative2
+Trump and Obama hate each other.,Trump,Obama,negative2,negative2
+Trump and Obama fight all the time.,Trump,Obama,negative2,negative2
+Trump and Obama met at a summit.,Trump,Obama,neutral2,neutral2
+Both Trump and Obama were US Presidents.,Trump,Obama,neutral2,none
+Trump and Obama exchanged business cards,Trump,Obama,neutral2,neutral2
+Trump spoke about Obama in a derogatory way.,Trump,Obama,negative1,negative1
+Trump mentioned Obama in glowing terms.,Trump,Obama,positive1,positive1
+Trump hired Obama.,Trump,Obama,positive1,positive1
+Obama was hired by Trump.,Obama,Trump,positive1,positive1
+Trump works for Obama’s company.,Trump,Obama,neutral1,neutral2
+Trump sent a warm letter to Obama.,Trump,Obama,positive1,positive1
+Trump received a warm letter from Obama.,Trump,Obama,positive1,positive1
+Trump received a stern rebuke from Obama.,Trump,Obama,negative1,negative1
+Trump sent a threat to Obama.,Trump,Obama,negative1,negative1

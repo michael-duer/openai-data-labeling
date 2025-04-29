@@ -1,0 +1,92 @@
+"""Label the relationship between the provided entities (**head** and **tail**) within the given sentence. Choose exactly one of the following labels:
+
+- **positive1:** A one-sided positive relationship (head positively influences or regards tail, but not necessarily reciprocated).
+- **positive2:** A mutually positive relationship (both head and tail share positive regard or interaction).
+- **neutral1:** A one-sided neutral relationship (head refers neutrally to tail, with no reciprocal interaction).
+- **neutral2:** A mutually neutral relationship (both head and tail maintain neutral interactions or mentions).
+- **negative1:** A one-sided negative relationship (head negatively perceives or impacts tail without mutual negativity).
+- **negative2:** A mutually negative relationship (both head and tail negatively affect or perceive each other).
+- **none:** No clear or discernible relationship, or the sentence is ambiguous concerning their relation.
+
+Examples:
+- positive1 (one-sided positive):
+  - Sentence: "Peskov is a high-level Kremlin insider and a key advisor to Putin."
+  - Head: "Peskov"
+  - Tail: "Putin"
+  - Relation: positive1 (Peskov explicitly benefits/advises Putin; not clearly reciprocated)
+- positive1 (one-sided positive):
+  - Sentence: "Lewandowski supported the Trump campaign’s policies openly."
+  - Head: "Lewandowski"
+  - Tail: "Trump campaign"
+  - Relation: positive1 (One-sided explicit support)
+- positive1 (one-sided positive):
+  - Sentence: "Person A facilitated contacts beneficial to Person B."
+  - Head: "Person A"
+  - Tail: "Person B"
+  - Relation: positive1
+- positive2 (mutual positive):
+  - Sentence: "Shugart recalled that she stayed with Trump for most of the party, indicating mutual comfort and companionship."
+  - Head: "Shugart"
+  - Tail: "Trump"
+  - Relation: positive2 (explicit mutual positive interaction)
+- neutral1 (one-sided neutral):
+  - Sentence: "Graff emailed Goldstone to inform him that Trump received Agalarov’s letter."
+  - Head: "Graff"
+  - Tail: "Goldstone"
+  - Relation: neutral1 (one-sided procedural communication without explicit sentiment)
+- neutral1 (one-sided neutral):
+  - Sentence: "Beniaminov emailed Goldstone to coordinate logistics."
+  - Head: "Beniaminov"
+  - Tail: "Goldstone"
+  - Relation: neutral1 (Procedural communication initiated by Beniaminov.)
+- neutral1 (one-sided neutral):
+  - Sentence: "Person A informed Person B without clear response."
+  - Head: "Person A"
+  - Tail: "Person B"
+  - Relation: neutral1
+- neutral2 (mutual neutral):
+  - Sentence: "Kilimnik and Manafort exchanged several emails about the Ukrainian elections."
+  - Head: "Kilimnik"
+  - Tail: "Manafort"
+  - Relation: neutral2 (mutual communication without sentiment)
+- neutral2 (mutual neutral):
+  - Sentence: "Manafort and Kilimnik discussed the election plans."
+  - Head: "Manafort"
+  - Tail: "Kilimnik"
+  - Relation: neutral2 (Clear mutual discussion without sentiment.)
+- neutral2 (mutual neutral):
+  - Sentence: "Person A and Person B discussed plans."
+  - Head: "Person A"
+  - Tail: "Person B"
+  - Relation: neutral2
+- negative1 (one-sided negative):
+  - Sentence: "The Russian effort was focused on U.S. sanctions against Russia."
+  - Head: "U.S."
+  - Tail: "Russia"
+  - Relation: negative1 (U.S. imposed sanctions negatively impacting Russia, without explicit reciprocal negativity)
+- negative1 (one-sided negative):
+  - Sentence: "Stone explicitly refused cooperation with Rasin."
+  - Head: "Stone"
+  - Tail: "Rasin"
+  - Relation: negative1 (Clear rejection and hostility.)
+- negative1 (one-sided negative):
+  - Sentence: "Person A refused Person B’s cooperation and explicitly criticized them."
+  - Head: "Person A"
+  - Tail: "Person B"
+  - Relation: negative1
+- negative2 (mutual negative):
+  - Sentence: "Long before Cohen turned on Trump, trust issues were evident on both sides."
+  - Head: "Cohen"
+  - Tail: "Trump"
+  - Relation: negative2 (explicit mutual distrust or hostility)
+- none (ambiguous or unclear):
+  - Sentence: "The IRA created accounts mimicking real U.S. organizations."
+  - Head: "IRA"
+  - Tail: ""
+  - Relation: none (relationship ambiguous or unclear due to lack of clear interaction)
+- none (no relation):
+  - Sentence: "Person A was wearing black jeans on this day."
+  - Head: "Person A"
+  - Tail: ""
+  - Relation: none
+"""

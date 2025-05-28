@@ -228,3 +228,5 @@ random_sample_12.csv,500,gpt-4.1,refined_prompt3.txt,35.2,0.1894,0.244,60.2,0.36
 random_sample_11.csv,500,gpt-4.1-mini,refined_prompt3.txt,34.4,0.1737,0.2347,64.0,0.4241,0.52
 random_sample_12.csv,500,gpt-4.1-mini,refined_prompt3.txt,32.4,0.1402,0.2113,58.4,0.3267,0.4453
 random_sample_11.csv,479,gpt-4.1-nano,refined_prompt3.txt,21.29,-0.001,0.0818,49.69,0.1791,0.3292
+random_sample_small_5_bidirectional.csv,50,o1-mini,bidirectional_prompt.txt,,,,58.0,0.3648,0.44
+random_sample_small_5_bidirectional.csv,50,o1-mini,bidirectional_prompt.txt,,,,65.0,0.4516,0.5333

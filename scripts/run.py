@@ -3,13 +3,13 @@ from helper_functions import *
 
 def main(): 
     # Specify what input file, model and system prompt to use
-    model_id = "gpt-4.1-nano" # Models: gpt-4-turbo, gpt-3.5-turbo, gpt-4o, gpt-4o-2024-11-20, gpt-4o-mini, o1
+    model_id = "o1-mini" # Models: gpt-4-turbo, gpt-3.5-turbo, gpt-4o, gpt-4o-2024-11-20, gpt-4o-mini, o1
     system_prompt_file = "bidirectional_prompt.txt"
     input_file = "random_sample_small_5_bidirectional.csv"
 
     # Specify if the relationship should be labelled uni- or bidirectional
-    # Bidirectional labelling only works with certain prompts and samples
-    bidirectional_relationship = True
+    # Bidirectional labelling only works with specific prompts and samples
+    bidirectional_relationship = True # TODO: detect automatically based on prompt name
 
     data = load_csv(input_file)
     

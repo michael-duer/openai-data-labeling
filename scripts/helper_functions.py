@@ -49,7 +49,7 @@ def generate_relation_labels(prompts, system_prompt, model, temperature):
   system_prompt = load_system_prompt(system_prompt)
 
   try:
-    # Adjust API request based on model used as reasoning models have a different structure
+    # Adjust API request based on model used as reasoning models use a different structure
     if model=="o1-mini" or "o3-mini":
         response = client.chat.completions.create(
             model = model,
@@ -154,12 +154,13 @@ def save_results_to_csv(results, input_file, output_file, bidirectional=False):
             how="left"
         )
         merged_df.rename(columns={
-            "rel_head_tail": "relation_predicted_head_tail",
-            "rel_tail_head": "relation_predicted_tail_head",
-            "relation_head_tail": "relation_true_head_tail",
-            "relation_tail_head": "relation_true_tail_head"
+            "rel_head_tail_x": "relation_predicted_head_tail",
+            "rel_tail_head_x": "relation_predicted_tail_head",
+            "rel_head_tail_y": "relation_true_head_tail",
+            "rel_tail_head_y": "relation_true_tail_head"
         }, inplace=True)
-        missing_true = merged_df["rel_true_head_tail"].isna() | merged_df["rel_true_tail_head"].isna()
+    
+        missing_true = merged_df["relation_true_head_tail"].isna() | merged_df["relation_true_tail_head"].isna()
     else:
         merged_df = pd.merge(
             results_df,
@@ -181,19 +182,20 @@ def save_results_to_csv(results, input_file, output_file, bidirectional=False):
         if match:
             matched_row = reference_df.loc[reference_df["sentence"] == match]
             if bidirectional:
-                return pd.DataFrame([
+                return (
                     matched_row["rel_head_tail"].values[0],
-                    matched_row["rel_tail_head"].values[0]
-                ])
+                    matched_row["rel_tail_head"].values[0]   
+                )
             else:
                 return matched_row["relation"].values[0]
-        return pd.DataFrame([None, None]) if bidirectional else None
+        return (None, None) if bidirectional else None
 
     # Fill missing values using fuzzy matching
     if bidirectional:
-        merged_df.loc[missing_true, ["rel_true_head_tail", "rel_true_tail_head"]] = merged_df[missing_true].apply(
-            lambda row: fuzzy_match(row, input_data, bidirectional=True), axis=1
-        )
+        merged_df.loc[missing_true, ["relation_true_head_tail", "relation_true_tail_head"]] = merged_df[missing_true].apply(
+            lambda row: pd.Series(fuzzy_match(row, input_data, bidirectional=True), 
+                                  index=["relation_true_head_tail", "relation_true_tail_head"]),
+                                  axis=1)
     else:
         merged_df.loc[missing_true, "relation_true"] = merged_df[missing_true].apply(
             lambda row: fuzzy_match(row, input_data, bidirectional=False), axis=1
@@ -263,91 +265,179 @@ def evaluate_model_predictions(model_id, system_prompt_file, input_file, output_
     """
     Evaluates the model's predictions against the true values in the output file.
     """
-    # Load data from the output CSV file
+    # Load data
     output_filepath = os.path.join("..", "data", "api_output", output_file)
     data = pd.read_csv(output_filepath)
-    
-    # Ensure necessary columns are present
-    if "relation_true" not in data.columns or "relation_predicted" not in data.columns:
-        raise ValueError("The output file must contain 'relation_true' and 'relation_predicted' columns.")
-    
-    # Lowercase the relations for consistency
-    data["relation_true"] = data["relation_true"].str.lower()
-    data["relation_predicted"] = data["relation_predicted"].str.lower()
-    
-    # Evaluate detailed labels
-    data["correct_detailed"] = data["relation_true"] == data["relation_predicted"]
 
-    # Mapping for Simplified Labels
-    simplify_mapping = {
-        "positive1": "positive", "positive2": "positive",
-        "neutral1": "neutral", "neutral2": "neutral",
-        "negative1": "negative", "negative2": "negative",
-        "none": "none"
-    }
-
-    # Apply the mapping
-    data["relation_true_simplified"] = data["relation_true"].map(simplify_mapping)
-    data["relation_predicted_simplified"] = data["relation_predicted"].map(simplify_mapping)
-    
-    # Evaluate Simplified Labels
-    data["correct_simplified"] = data["relation_true_simplified"] == data["relation_predicted_simplified"]
-
-    # Calculate accuracy metrics
     total_count = len(data)
-    
-    correct_detailed_count = data["correct_detailed"].sum()
-    correct_simplified_count = data["correct_simplified"].sum()
-    
-    accuracy_detailed = round((correct_detailed_count / total_count) * 100, 2)
-    accuracy_simplified = round((correct_simplified_count / total_count) * 100, 2)
 
-    # Compute Krippendorf's Alpha
-    alpha_detailed = krippendorff_alpha(data, "relation_true", "relation_predicted")
-    alpha_simplified = krippendorff_alpha(data,"relation_true_simplified", "relation_predicted_simplified")
-    # Compute Brennan-Prediger Alpha
-    alpha_bp_detailed = brennan_prediger_alpha(data, "relation_true", "relation_predicted", level="detailed")
-    alpha_bp_simplified = brennan_prediger_alpha(data, "relation_true_simplified", "relation_predicted_simplified", level="simplified")
+    if bidirectional:
+        # Ensure necessary columns are present
+        if "relation_true_head_tail" not in data.columns or \
+            "relation_true_tail_head" not in data.columns or \
+            "relation_predicted_head_tail" not in data.columns or \
+            "relation_predicted_tail_head" not in data.columns:
+            raise ValueError("The output file must contain the columns: 'relation_true_head_tail', 'relation_true_tail_head', 'relation_predicted_head_tail' and 'relation_predicted_tail_head'.")
 
-    # Print evaluation to console
-    # Define table borders and formatting
-    top_border = "\033[1;37m┏" + "━" * 56 + "┓\033[0m"
-    middle_border = "\033[1;37m┣" + "━" * 56 + "┫\033[0m"
-    bottom_border = "\033[1;37m┗" + "━" * 56 + "┛\033[0m"
-    # Title
-    print("\n\033[1;4mPre-Labeling Evaluation Summary\033[0m\n")  # Bold and Underlined
-    print(f"Input file: {input_file}")
-    print(f"Number of samples: {total_count}")
-    print(f"Model: {model_id}")
-    print(f"Prompt: {system_prompt_file}\n")
-    print(top_border)
-    print(f"\033[1m┃ {'Metric':<24} ┃ {'Full Labels':>11} ┃ {'Simple Labels':>13} ┃\033[0m")
-    print(middle_border)
-    # Data rows
-    print(f"┃ {'Correct Predictions':<24} ┃ \033[32m{correct_detailed_count:>11}\033[0m ┃ \033[32m{correct_simplified_count:>13}\033[0m ┃")  # Green
-    print(f"┃ {'Incorrect Predictions':<24} ┃ \033[31m{total_count - correct_detailed_count:>11}\033[0m ┃ \033[31m{total_count - correct_simplified_count:>13}\033[0m ┃")  # Red
-    print(f"┃ {'Accuracy':<24} ┃ {accuracy_detailed:>10}% ┃ {accuracy_simplified:>12}% ┃")
-    print(f"┃ {'Krippendorff’s Alpha':<24} ┃ {alpha_detailed:>11.3f} ┃ {alpha_simplified:>13.3f} ┃")
-    print(f"┃ {'Brennan-Prediger’s Alpha':<24} ┃ {alpha_bp_detailed:>11.3f} ┃ {alpha_bp_simplified:>13.3f} ┃")
-    print(bottom_border)
+        # Collect both directions into a long-form DataFrame
+        long_data = pd.DataFrame({
+            "relation_true": pd.concat([
+                data["relation_true_head_tail"],
+                data["relation_true_tail_head"]
+            ], ignore_index=True),
+            "relation_predicted": pd.concat([
+                data["relation_predicted_head_tail"],
+                data["relation_predicted_tail_head"]
+            ], ignore_index=True)
+        })
 
-    # Add evaluation data as new row to csv file
-    evaluation_filepath = os.path.join("..", "data", "evaluation", "evaluation.csv")
-    evaluation_file = pd.read_csv(evaluation_filepath)
-    new_row = pd.DataFrame([{
-        # Metadata
-        "dataset": input_file, "sample_size": total_count, "model": model_id, "prompt": system_prompt_file,
-        # Detailed labels
-        "accuracy_detailed": accuracy_detailed, "krippendorff_detailed": alpha_detailed, "bp_detailed": alpha_bp_detailed,
-        # Simplified labels
-        "accuracy_simplified": accuracy_simplified, "krippendorff_simplified": alpha_simplified, "bp_simplified": alpha_bp_simplified
-        }])
-    evaluation_file = pd.concat([evaluation_file, new_row], ignore_index=True)
-    evaluation_file.to_csv(evaluation_filepath, index=False)
+        # Normalize labels
+        long_data["relation_true"] = long_data["relation_true"].astype(str).str.lower()
+        long_data["relation_predicted"] = long_data["relation_predicted"].astype(str).str.lower()
 
-    # Optionally, save detailed comparison as a separate CSV
-    detailed_output_filepath = os.path.join("..", "data", "api_output", f"detailed_{output_file}")
-    data.to_csv(detailed_output_filepath, index=False)
+        # Compute correctness of predicted labels
+        long_data["correct"] = long_data["relation_true"] == long_data["relation_predicted"]
+
+        correct_count = long_data["correct"].sum()
+        accuracy = round((correct_count / len(long_data)) * 100, 2)
+
+        alpha = krippendorff_alpha(long_data, "relation_true", "relation_predicted")
+        bp_alpha = brennan_prediger_alpha(long_data, "relation_true", "relation_predicted", level="simplified")
+
+        # Print summary to console
+        print("\n\033[1;4mPre-Labeling Evaluation Summary (Bidirectional)\033[0m\n")
+        print(f"Input file: {input_file}")
+        print(f"Number of sentences: {total_count}")
+        print(f"Model: {model_id}")
+        print(f"Prompt: {system_prompt_file}\n")
+
+        print("\033[1;37m┏" + "━" * 56 + "┓\033[0m")
+        print(f"\033[1m┃ {'Metric':<24} ┃ {'Bidirectional':>27} ┃\033[0m")
+        print("\033[1;37m┣" + "━" * 56 + "┫\033[0m")
+        print(f"┃ {'Correct Predictions':<24} ┃ \033[32m{correct_count:>27}\033[0m ┃")
+        print(f"┃ {'Incorrect Predictions':<24} ┃ \033[31m{len(long_data) - correct_count:>27}\033[0m ┃")
+        print(f"┃ {'Accuracy':<24} ┃ {accuracy:>26}% ┃")
+        print(f"┃ {'Krippendorff’s Alpha':<24} ┃ {alpha:>27.3f} ┃")
+        print(f"┃ {'BP Alpha':<24} ┃ {bp_alpha:>27.3f} ┃")
+        print("\033[1;37m┗" + "━" * 56 + "┛\033[0m")
+
+        # Log results to evaluation.csv
+        evaluation_filepath = os.path.join("..", "data", "evaluation", "evaluation.csv")
+        evaluation_file = pd.read_csv(evaluation_filepath)
+        new_row = pd.DataFrame([{
+            # Metadata
+            "dataset": input_file, "sample_size": total_count, "model": model_id, "prompt": system_prompt_file,
+            # In case of bidirectional labeling there are only one kind of labels
+            "accuracy_detailed": "", "krippendorff_detailed": "", "bp_detailed": "",
+            "accuracy_simplified": accuracy, "krippendorff_simplified": alpha, "bp_simplified": bp_alpha
+            }])
+        evaluation_file = pd.concat([evaluation_file, new_row], ignore_index=True)
+        evaluation_file.to_csv(evaluation_filepath, index=False)
+
+        # Save detailed comparison as a separate CSV
+        detailed_output_filepath = os.path.join("..", "data", "api_output", f"detailed_{output_file}")
+        # Insert column indicating if prediction is true/false
+        data["correct_head_tail"] = data["relation_predicted_head_tail"] == data["relation_true_head_tail"]
+        data["correct_tail_head"] = data["relation_predicted_tail_head"] == data["relation_true_tail_head"]
+        # Adjust order of columns
+        data = data[list(("sentence",
+                          "head",
+                          "tail",
+                          "relation_predicted_head_tail",
+                          "relation_true_head_tail",
+                          "correct_head_tail",
+                          "relation_predicted_tail_head",
+                          "relation_true_tail_head",
+                          "correct_tail_head",
+                          ))]
+        data.to_csv(detailed_output_filepath, index=False)
+        return
+
+    else:
+        # Ensure necessary columns are present
+        if "relation_true" not in data.columns or "relation_predicted" not in data.columns:
+            raise ValueError("The output file must contain 'relation_true' and 'relation_predicted' columns.")
+        
+        # Normalize labels
+        data["relation_true"] = data["relation_true"].astype(str).str.lower()
+        data["relation_predicted"] = data["relation_predicted"].astype(str).str.lower()
+        
+        # Compute correctness of predicted detailed labels
+        data["correct_detailed"] = data["relation_true"] == data["relation_predicted"]
+
+        # Mapping for Simplified Labels
+        simplify_mapping = {
+            "positive1": "positive", "positive2": "positive",
+            "neutral1": "neutral", "neutral2": "neutral",
+            "negative1": "negative", "negative2": "negative",
+            "none": "none"
+        }
+
+        # Apply the mapping
+        data["relation_true_simplified"] = data["relation_true"].map(simplify_mapping)
+        data["relation_predicted_simplified"] = data["relation_predicted"].map(simplify_mapping)
+
+        # Compute correctness of predicted simplified labels
+        data["correct_simplified"] = data["relation_true_simplified"] == data["relation_predicted_simplified"]
+
+        # Calculate accuracy metrics
+        total_count = len(data)
+        
+        correct_detailed_count = data["correct_detailed"].sum()
+        correct_simplified_count = data["correct_simplified"].sum()
+        
+        accuracy_detailed = round((correct_detailed_count / total_count) * 100, 2)
+        accuracy_simplified = round((correct_simplified_count / total_count) * 100, 2)
+
+        # Compute Krippendorf's Alpha
+        alpha_detailed = krippendorff_alpha(data, "relation_true", "relation_predicted")
+        alpha_simplified = krippendorff_alpha(data,"relation_true_simplified", "relation_predicted_simplified")
+        # Compute Brennan-Prediger Alpha
+        alpha_bp_detailed = brennan_prediger_alpha(data, "relation_true", "relation_predicted", level="detailed")
+        alpha_bp_simplified = brennan_prediger_alpha(data, "relation_true_simplified", "relation_predicted_simplified", level="simplified")
+
+        # Print summary to console
+        # Define table borders and formatting
+        top_border = "\033[1;37m┏" + "━" * 56 + "┓\033[0m"
+        middle_border = "\033[1;37m┣" + "━" * 56 + "┫\033[0m"
+        bottom_border = "\033[1;37m┗" + "━" * 56 + "┛\033[0m"
+        # Title
+        print("\n\033[1;4mPre-Labeling Evaluation Summary\033[0m\n")  # Bold and Underlined
+        print(f"Input file: {input_file}")
+        print(f"Number of sentences: {total_count}")
+        print(f"Model: {model_id}")
+        print(f"Prompt: {system_prompt_file}\n")
+        print(top_border)
+        print(f"\033[1m┃ {'Metric':<24} ┃ {'Full Labels':>11} ┃ {'Simple Labels':>13} ┃\033[0m")
+        print(middle_border)
+        # Data rows
+        print(f"┃ {'Correct Predictions':<24} ┃ \033[32m{correct_detailed_count:>11}\033[0m ┃ \033[32m{correct_simplified_count:>13}\033[0m ┃")  # Green
+        print(f"┃ {'Incorrect Predictions':<24} ┃ \033[31m{total_count - correct_detailed_count:>11}\033[0m ┃ \033[31m{total_count - correct_simplified_count:>13}\033[0m ┃")  # Red
+        print(f"┃ {'Accuracy':<24} ┃ {accuracy_detailed:>10}% ┃ {accuracy_simplified:>12}% ┃")
+        print(f"┃ {'Krippendorff’s Alpha':<24} ┃ {alpha_detailed:>11.3f} ┃ {alpha_simplified:>13.3f} ┃")
+        print(f"┃ {'Brennan-Prediger’s Alpha':<24} ┃ {alpha_bp_detailed:>11.3f} ┃ {alpha_bp_simplified:>13.3f} ┃")
+        print(bottom_border)
+
+        # Log results to evaluation.csv
+        evaluation_filepath = os.path.join("..", "data", "evaluation", "evaluation.csv")
+        evaluation_file = pd.read_csv(evaluation_filepath)
+        new_row = pd.DataFrame([{
+            # Metadata
+            "dataset": input_file, "sample_size": total_count, "model": model_id, "prompt": system_prompt_file,
+            # Detailed labels
+            "accuracy_detailed": accuracy_detailed, "krippendorff_detailed": alpha_detailed, "bp_detailed": alpha_bp_detailed,
+            # Simplified labels
+            "accuracy_simplified": accuracy_simplified, "krippendorff_simplified": alpha_simplified, "bp_simplified": alpha_bp_simplified
+            }])
+        evaluation_file = pd.concat([evaluation_file, new_row], ignore_index=True)
+        evaluation_file.to_csv(evaluation_filepath, index=False)
+
+        # Optionally, save detailed comparison as a separate CSV
+        detailed_output_filepath = os.path.join("..", "data", "api_output", f"detailed_{output_file}")
+        data.to_csv(detailed_output_filepath, index=False)
+        return
+
+
 
 def generate_confusion_matrices(model_id, system_prompt_file, input_file, output_file, show_plot = True):
     """

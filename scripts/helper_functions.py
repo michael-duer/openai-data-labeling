@@ -206,6 +206,38 @@ def save_results_to_csv(results, input_file, output_file, bidirectional=False):
     merged_df.to_csv(output_filepath, index=False)
     print(f"Results saved in {output_filepath}")
 
+def aggregate_majority_labels(output_file):
+    """
+    Group labelled data by sentence and choose the most used label for each sentence. Output a dataframe without duplicates.
+    """
+    # Read data
+    output_filepath = os.path.join("..", "data", "api_output", output_file)
+    df = pd.read_csv(output_filepath)
+
+    # Group by sentence, head, tail, and relation_true and remove groups with less than 3 sentences as these are AI mistakes
+    grouped = df.groupby(['sentence', 'head', 'tail', 'relation_true'])#.filter(lambda x: len(x) >=3)
+
+    print(grouped)
+
+    # For each group, find the most common predicted label
+    def get_most_common_prediction(group):
+        most_common = group['relation_predicted'].mode()
+        # If there's a tie, pick the first value
+        selected_prediction = most_common.iloc[0]
+        # Get a copy of each grouped sentence and replace the predicted relation with the most common one
+        representative_row = group.iloc[0].copy()
+        representative_row['relation_predicted'] = selected_prediction
+        return representative_row
+
+    deduplicated_df = grouped.apply(get_most_common_prediction).reset_index(drop=True)
+
+    # Save cleaned data in new CSV file
+    deduplicated_output_filepath = os.path.join("..", "data", "api_output", f"deduplicated_{output_file}")
+    deduplicated_df.to_csv(deduplicated_output_filepath, index=False)
+
+    return
+
+
 def krippendorff_alpha(data, column_true, column_predicted):
     """
     Computes Krippendorff's alpha for inter-rater agreement.

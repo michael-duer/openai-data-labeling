@@ -7,24 +7,15 @@ def main():
     system_prompt_file = "bidirectional_prompt.txt"
     input_file = "random_sample_small_5_bidirectional.csv"
 
-    # Specify if the relationship should be labelled uni- or bidirectional
-    # Bidirectional labelling only works with specific prompts and samples
-    bidirectional_relationship = True # TODO: detect automatically based on prompt name
-
     data = load_csv(input_file)
     
     batch_size = 50
-    
-    # Set parameters based on directional type
-    if bidirectional_relationship: 
-         # Name the output file based on the used parameters for simple identification
-        output_file = f"output_{generate_filename(model_id,system_prompt_file,input_file)}_bi.csv"
-        prompts = generate_prompts(user_prompt_bidirectional, data, batch_size) # Choose batch size
-    else:
-        output_file = f"output_{generate_filename(model_id,system_prompt_file,input_file)}_uni.csv"
-        prompts = generate_prompts(user_prompt_unidirectional, data, batch_size) # Choose batch size
+    output_file = f"output_{generate_filename(model_id,system_prompt_file,input_file)}.csv"
+
+    # Create list of prompts based on input file
+    prompts = generate_prompts(data, batch_size)
    
-    # Call API with sentences
+    # Send batched prompts to the API and collect predicted relation labels
     results = []
     for index, prompt in enumerate(prompts):
         print(f"Send batch {index+1} of {len(prompts)} to the OpenAI API...")
@@ -46,15 +37,12 @@ def main():
                 print("Failed to parse API response as JSON.")
                 print(f"API Response: {response}")
                 # Add empty json if API response fails to not mess up the order of the sentences for the comparison step
-                if bidirectional_relationship:
-                    results.extend([{"sentence": "","head": "","tail": "","rel_head_tail": "","rel_tail_head": ""}])
-                else:
-                    results.extend([{"sentence": "","head": "","tail": "","relation": ""}])
+                results.extend([{"sentence": "","head": "","tail": "","rel_head_tail": "","rel_tail_head": ""}])
 
-    save_results_to_csv(results, input_file, output_file, bidirectional=bidirectional_relationship)
+    save_results_to_csv(results, input_file, output_file)
     # Compare results with true values and generate confusion matrix
-    evaluate_model_predictions(model_id, system_prompt_file, input_file, output_file, bidirectional=bidirectional_relationship)
-    #generate_confusion_matrices(model_id, system_prompt_file, input_file, output_file, bidirectional=bidirectional_relationship, show_plot=False)
+    evaluate_model_predictions(model_id, system_prompt_file, input_file, output_file)
+    generate_confusion_matrix(model_id, system_prompt_file, input_file, output_file, show_plot=False)
 
 if __name__ == "__main__":
     main()

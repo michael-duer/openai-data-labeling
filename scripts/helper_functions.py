@@ -231,7 +231,7 @@ def save_results_to_csv(results, input_file, output_file):
     # Save the merged results to the output CSV
     output_filepath = os.path.join("..", "data", "api_output", output_file)
     merged_df.to_csv(output_filepath, index=False)
-    print(f"Results saved in {output_filepath}")
+    print(f"Results saved to: {output_filepath}")
 
 def krippendorff_alpha(data, column_true, column_predicted):
     """
@@ -348,11 +348,11 @@ def evaluate_model_predictions(model_id, system_prompt_file, input_file, output_
     bp_alpha = brennan_prediger_alpha(long_data, "relation_true", "relation_predicted")
 
     # Print summary to console
-    print("\n\033[1;4mPre-Labeling Evaluation Summary\033[0m\n")
-    print(f"Input file: {input_file}")
+    print("\n\033[1;4mEvaluation Summary\033[0m\n")
+    print(f"Input file         : {input_file}")
     print(f"Number of sentences: {total_count}")
-    print(f"Model: {model_id}")
-    print(f"Prompt: {system_prompt_file}\n")
+    print(f"Model              : {model_id}")
+    print(f"Prompt             : {system_prompt_file}\n")
 
     print("\033[1;37m┏" + "━" * 56 + "┓\033[0m")
     print(f"\033[1m┃ {'Metric':<24} ┃ {'Value':>27} ┃\033[0m")
@@ -362,7 +362,7 @@ def evaluate_model_predictions(model_id, system_prompt_file, input_file, output_
     print(f"┃ {'Accuracy':<24} ┃ {accuracy:>26}% ┃")
     print(f"┃ {'Krippendorff’s Alpha':<24} ┃ {k_alpha:>27.3f} ┃")
     print(f"┃ {'BP Alpha':<24} ┃ {bp_alpha:>27.3f} ┃")
-    print("\033[1;37m┗" + "━" * 56 + "┛\033[0m")
+    print("\033[1;37m┗" + "━" * 56 + "┛\033[0m\n")
 
     # Log results to evaluation.csv
     evaluation_filepath = os.path.join("..", "data", "evaluation", "evaluation.csv")

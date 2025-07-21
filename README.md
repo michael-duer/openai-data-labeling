@@ -1,16 +1,26 @@
-# Relationship labeling using OpenAI API
+# Entity Relation Annotator
+_A research tool for labeling and evaluating entity relationships using the OpenAI API_
 
-This repository contains scripts which use the OpenAI API to label relationships between two named entities within sentences. The labeled output is saved as CSV files, which can be used to train machine learning models for relationship detection.
+<ul style="background-color:#FFA0F0;font-style:italic"> <span style="color:red;font-weight:bold">TODO</span> <br>
+- rename repo to entity-relation-annotator ?<br>
+- find suitable emoji/symbol to put into title <br>
+- add license <br>
+</ul>
+
+This repository provides a tool for automatically labeling the relationship between two entities in a given sentence using models from the OpenAI API. It takes a CSV file as input, containing sentences along with pre-annotated entity pairs, and returns an updated CSV file with predicted relationship labels. Progress is logged in the terminal throughout the process.
+
+If ground truth labels are provided, the tool can also compute evaluation metrics such as accuracy and Krippendorff’s alpha to assess intercoder reliability. It generates a confusion matrix to visualize model performance and saves all evaluation results to file, enabling easy comparison between different combinations of prompts, models, and datasets.
 
 ## Features
 
 - **Batch Processing:** Efficiently processes sentences in batches.
 - **Relationship Categorization:** Detect and categorizes relationships using predefined categories:
-  - Positive1 (one-sided), Positive2 (mutual)
-  - Neutral1 (one-sided), Neutral2 (mutual)
-  - Negative1 (one-sided), Negative2 (mutual)
-  - None (no relationship detected)
+  - Positive
+  - Neutral
+  - Negative
+  - None  (no relationship detected)
 - **CSV Output:** Exports the labeled data in CSV format.
+- **Logging**: Logs progress in the terminal.
 - **Evaluation Metrics:** Generates confusion matrices and calculates key performance metrics (accuracy, Krippendorff’s Alpha, and Brennan-Prediger’s Alpha) to assess model performance.
 
 ## Project Structure
@@ -19,7 +29,7 @@ This repository contains scripts which use the OpenAI API to label relationships
 ├── data
 │   ├── api_output/               # OpenAI-labeled output files
 │   ├── evaluation/
-│   │   ├── confusion_matrices/   # Confusion matrices for analysis
+│   │   ├── confusion_matrices/   # Confusion matrix plots for analysis
 │   │   └── evaluation.csv        # Evaluation metrics/results
 │   ├── samples/                  # Sampled input sentences for labeling
 │   └── TrainingData.csv          # Ground truth labeled data
@@ -46,7 +56,7 @@ This repository contains scripts which use the OpenAI API to label relationships
 
 - **R** (only needed for creating samples and evaluating the output files)
 
-  Needed packages are: `dplyr`, `ggplot2`, `gridExtra` and `grid`.
+  Needed packages are: `tidyr`, `ggplot2`, `gridExtra` and `grid`.
 
 - **OpenAI API Access**
 
@@ -83,20 +93,25 @@ OPENAI_API_KEY = your_openai_api_key
 
 2. **Configure the Script**
 
-   In `scripts/run.py`, adjust the following parameters:
+   In `scripts/run.py`, adjust the following parameters when calling the `process_and_evaluate_files()` function:
 
    - **model_id**: The OpenAI model identifier (e.g., `gpt-4-turbo`).
    - **system_prompt_file**: The prompt file (located in the `prompts/` folder).
+   - **true_value_known**: Boolean indicating if the true relationship value is known and therefore performance metrics can be calculated.
+	<p style="background-color:#FFA0F0;font-style:italic"> <span style="color:red;font-weight:bold">TODO</span> add this input parameter to script or add automated checking for such columns. </p>
    - **input_file**: The CSV file name with the input sentences.
-   - **Batch Size**: Modify the batch size in the `generate_prompts()` function based on the token limits of your chosen model.
+   - **batch_size**: Modify the batch size in the `generate_prompts()` function based on the token limits of your chosen model.
+   - **num_iterations**: Number of times the sentences should be labelled. If number >1 the metrics can be averaged to make results more robust.
+   - **override**: Determines whether to overwrite existing output files or skip them. 
 
 3. **Run the Labeling Process**
 
 ```bash
  cd scripts
- python run.py
+ python run.py # or python3 run.py on linux/unix
 ```
 
+<p style="background-color:#FFA0F0;font-style:italic"> <span style="color:red;font-weight:bold">TODO</span> check and adjust detailed output if file still exists</p>
 The labeled output will be saved as two files in the `data/api_output/` directory with the filenames formatted as:
 
 ```
@@ -111,15 +126,20 @@ The output CSV file includes:
 - `sentence`: The original sentence.
 - `head`: First named entity.
 - `tail`: Second named entity.
-- `relation_predicted`: Predicted relationship.
-- `relation_true`: True relationship.
+- `relation_predicted_head_tail`: Predicted Relationship from entity head to tail.
+- `relation_predicted_tail_head`: Predicted Relationship from entity tail to head.
+- `relation_true_head_tail`: True relationship from head to tail (if available).
+- `relation_true_tail_head`: True relationship from tail to head (if available).
+
+
+<p style="background-color:#FFA0F0;font-style:italic"> <span style="color:red;font-weight:bold">TODO</span> check and adjust detailed output if file still exists</p>
 
 The detailed output file additionally also contains the following columns:
 
 - `correct_detailed`: Indicates if the detailed relationship labels match.
 - `relation_true_simplified`: Simplified version of the true relationship without one-sided/mutual (e.g. `neutral` instead of `neutral1`).
 - `relation_predicted_simplified`: Simplified version of the predicted relationship without one-sided/mutual (e.g. `neutral` instead of `neutral1`).
-- `correct_simplified`: Indicates if the simplified relationship labels match.
+- `correct_simplified`: Indicates if the simplified relationship labels match
 
 ## Evaluation Metrics
 
@@ -128,9 +148,24 @@ The evaluation file contains:
 - **Dataset Details**:
   - Sample file name and size.
   - Model and prompt used.
-- **Performance Metrics** (for both detailed and simplified labels):
+- **Performance Metrics**:
   - Accuracy
   - Krippendorff’s Alpha
   - Brennan-Prediger’s Alpha
 
 These metrics help compare different models and prompt configurations.
+
+## Known Issues and Problems with the API
+- **Non-deterministic Output:**
+Even with `temperature=0` and fixed parameters, OpenAI models can produce slightly different outputs for the same input. To mitigate this, you may run multiple iterations and either average the results or apply a majority voting strategy (see the WIP branch `majority-voting`).
+
+- **Incomplete Responses from API:**
+Occasionally, the API may return fewer outputs than expected without raising an error. Re-running the script with the same input usually resolves this. If the issue persists, it may be related to the model’s context window limit. Reducing the batch size or switching to a model with a larger context window typically fixes the problem.
+
+- **Batch Size Sensitivity:**
+Large batch sizes may cause truncated outputs or reduced performance, especially on models with smaller context windows (e.g., `gpt-3.5-turbo`). Experiment with batch sizes that fit within the model's token limit.
+
+- **Performance Degradation on Large Jobs:**
+Labeling too many files or long inputs in one run can lead to degraded performance, incomplete results, or API rate limiting. For instance, processing 10 files with 50 sentences each has been tested successfully. If you encounter issues, try processing fewer files at a time.
+
+<p style="background-color:#FFA0F0;font-style:italic"> <span style="color:red;font-weight:bold">TODO</span> name example where tool struggled to reliably label sentences</p>

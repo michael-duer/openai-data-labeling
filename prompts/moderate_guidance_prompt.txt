@@ -19,42 +19,42 @@ Examples:
   - Sentence: "Peskov is a high-level Kremlin insider and a key advisor to Putin."
   - Head: "Peskov"
   - Tail: "Putin"
-  - Rel_head_tail: positive
-  - Rel_tail_head: positive
+  - rel_head_tail: positive
+  - rel_tail_head: positive
 - Example 2:
   - Sentence: "Lewandowski supported the Trump campaign’s policies openly."
   - Head: "Lewandowski"
   - Tail: "Trump campaign"
-  - Rel_head_tail: positive
-  - Rel_tail_head: neutral
+  - rel_head_tail: positive
+  - rel_tail_head: positive
 - Example 3:
-  - Sentence: "Graff emailed Goldstone to inform him that Trump received Agalarov’s letter."
-  - Head: "Graff"
-  - Tail: "Goldstone"
-  - Rel_head_tail: neutral
-  - Rel_tail_head: neutral
-- Example 4:
   - Sentence: "Manafort and Kilimnik discussed the election plans."
   - Head: "Manafort"
   - Tail: "Kilimnik"
-  - Rel_head_tail: neutral
-  - Rel_tail_head: neutral
+  - rel_head_tail: neutral
+  - rel_tail_head: neutral
+  - Example 4:
+  - Sentence: "Cohen also was a lifeguard at the El Caribe Country Club in south Brooklyn."
+  - Head: "Cohen"
+  - Tail: "El Caribe Country Club"
+  - rel_head_tail: neutral
+  - rel_tail_head: neutral
 - Example 5:
   - Sentence: "The Russian effort was focused on U.S. sanctions against Russia."
   - Head: "U.S."
   - Tail: "Russia"
-  - Rel_head_tail: negative
-  - Rel_tail_head: negative
+  - rel_head_tail: negative
+  - rel_tail_head: negative
 - Example 6:
   - Sentence: "Stone explicitly refused cooperation with Rasin."
   - Head: "Stone"
   - Tail: "Rasin"
-  - Rel_head_tail: negative
-  - Rel_tail_head: none
+  - rel_head_tail: negative
+  - rel_tail_head: none
 - Example 7:
   - Sentence: "The IRA created accounts mimicking real U.S. organizations."
   - Head: "IRA"
   - Tail: ""
-  - Rel_head_tail: none
-  - Rel_tail_head: none
+  - rel_head_tail: none
+  - rel_tail_head: none
 """

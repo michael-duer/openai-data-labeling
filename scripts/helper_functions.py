@@ -33,6 +33,21 @@ def generate_filename(model_id,system_prompt_file,input_file):
 
     return f"{model_id}_{clean_prompt}_{clean_input}"
 
+def has_ground_truth_columns(df):
+    """
+    Checks whether the given DataFrame contains the required ground truth columns
+    for evaluating model predictions.
+
+    Parameters:
+        df (pandas.DataFrame): The DataFrame to check.
+
+    Returns:
+        bool: True if both 'relation_true_head_tail' and 'relation_true_tail_head' 
+              columns are present; False otherwise.
+    """
+    required = ["relation_true_head_tail", "relation_true_tail_head"]
+    return all(col in df.columns for col in required)
+
 def load_csv(filename):
     """
     Loads sentence data from a CSV file located in the "data/samples/" directory.
@@ -176,7 +191,7 @@ def generate_prompts(data, batch_size=5):
 
 def save_results_to_csv(results, input_file, output_file):
     """
-    Save labeled results to a CSV file, including ground truth labels from the input file.
+    Save labeled results to a CSV file, including ground truth labels from the input file if available.
 
     Parameters:
         results (list): List of dictionaries containing model predictions. Each dictionary 
@@ -192,6 +207,14 @@ def save_results_to_csv(results, input_file, output_file):
 
     # Convert results (list of dicts) to DataFrame
     results_df = pd.DataFrame(results)
+
+    # Check if ground truth columns exist
+    if not has_ground_truth_columns(input_data):
+        # Save results without merging to the output CSV
+        output_filepath = os.path.join("..", "data", "api_output", output_file)
+        results_df.to_csv(output_filepath, index=False)
+        print(f"Results saved to: {output_filepath}")
+        return
 
     # Merge results with true relations based on sentence, head, and tail
     merged_df = pd.merge(
@@ -315,6 +338,16 @@ def evaluate_model_predictions(model_id, system_prompt_file, input_file, output_
 
     total_count = len(data)
 
+    # Check if ground truth columns exist
+    if not has_ground_truth_columns(data):
+        print("\n\033[1;4mSummary\033[0m\n")
+        print(f"Input file         : {input_file}")
+        print(f"Number of sentences: {total_count}")
+        print(f"Model              : {model_id}")
+        print(f"Prompt             : {system_prompt_file}\n")
+        print(f"\n[INFO] Ground truth not available. Skipping evaluation.\n")
+        return
+    
     # Ensure necessary columns are present
     if "relation_true_head_tail" not in data.columns or \
         "relation_true_tail_head" not in data.columns or \
@@ -396,7 +429,7 @@ def evaluate_model_predictions(model_id, system_prompt_file, input_file, output_
 
 def generate_confusion_matrix(model_id, system_prompt_file, input_file, output_file, show_plot = True):
     """
-    Generates and saves a confusion matrix plot for model predictions.
+    Generates and saves a confusion matrix plot for model predictions. This only works if ground truth data is available.
 
     Parameters:
         model_id (str): Identifier of the model used.
@@ -413,6 +446,11 @@ def generate_confusion_matrix(model_id, system_prompt_file, input_file, output_f
     # Load the output CSV file
     output_filepath = os.path.join("..", "data", "api_output", output_file)
     data = pd.read_csv(output_filepath)
+
+    # Check if ground truth columns exist
+    if not has_ground_truth_columns(data):
+        print(f"[INFO] Ground truth not found in '{output_file}'. Skipping confusion matrix generation.\n")
+        return
 
     # Ensure necessary columns are present
     if "relation_true_head_tail" not in data.columns or \

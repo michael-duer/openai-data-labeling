@@ -24,19 +24,17 @@ def process_and_evaluate_files(model_id, test_files, system_prompt, batch_size =
         output_filepath = os.path.join(output_dir, output_file)
         file_exists = os.path.exists(output_filepath)
 
-        # If there is no file or if override is set to true -> create new file
         if file_exists and not override:
             print(f"Skipping {input_file} -> Output file already exists.")
             continue
-
-        print("------------------------------------------------------------")
-        print(f"[START] Processing: {input_file}\n")
-        #print("------------------------------------------------------------\n")
         
         # Load files
         data = load_csv(input_file)
         # Save number to compare with output
         num_sentences_input = len(data)
+
+        print("------------------------------------------------------------")
+        print(f"[START] Processing: {input_file}\n")
 
         # Create list of prompts based on input file
         prompts = generate_prompts(data, batch_size)
@@ -75,18 +73,16 @@ def process_and_evaluate_files(model_id, test_files, system_prompt, batch_size =
         num_sentences_output = len(output_data)
 
         if num_sentences_input != num_sentences_output:
-            print(f"⚠️ Mismatch in numer of sentences: input = {num_sentences_input}, output = {num_sentences_output}")
+            print(f"\n⚠️ Mismatch in number of sentences: input = {num_sentences_input}, output = {num_sentences_output}\n")
             user_input = input("Do you want to re-label this file? [y/n] ")
             if user_input.strip().lower() == "y":
                 print("🔁 Rerun not yet implemented.")
                 # TODO implement re-run functionality
-                # Could re-call this function with override=True for this file
 
         # Compare results with true values and generate confusion matrix
         evaluate_model_predictions(model_id, system_prompt, input_file, output_file)
         generate_confusion_matrix(model_id, system_prompt, input_file, output_file, show_plot=False)
 
-        #print("------------------------------------------------------------")
         print(f"[END] Finished processing file {file_index+1} of {len(test_files)}.")
         print("------------------------------------------------------------\n")
 
@@ -94,9 +90,9 @@ def process_and_evaluate_files(model_id, test_files, system_prompt, batch_size =
 
 def main(): 
     # Specify model and system prompt to use
-    model_id = "o4-mini" # Models: gpt-4-turbo, gpt-3.5-turbo, gpt-4o, gpt-4o-2024-11-20, gpt-4o-mini, o1
-    system_prompt_file = "bidirectional_prompt.txt" # old_prompt.txt bidirectional_prompt.txt new_prompt2.txt
-
+    model_id = "o4-mini" # Models: gpt-4-turbo, gpt-3.5-turbo, gpt-4o, gpt-4.1, gpt-4o-mini, o1, o4-mini
+    system_prompt_file = "detailed_guidance_prompt.txt" # "zero_shot_prompt.txt" "detailed_guidance_prompt.txt" "moderate_guidance_prompt.txt"
+    
     # 10 small samples with 50 sentences each
     test_files_small = ["random_sample_small_3.csv","random_sample_small_4.csv","random_sample_small_5.csv",
                         "random_sample_small_6.csv","random_sample_small_7.csv","random_sample_small_8.csv",
@@ -108,10 +104,11 @@ def main():
 
     # Single files must be inside a list for the function to work properly
     trumpiverse_article = ["forbes_trumpiverse.csv"]
+    synthetic_data = ["synthetic_sample.csv"]
 
     # Call API with set parameters on chosen set of files
     # Using too many files/sentences might lead to rate limiting and worse performance 
-    process_and_evaluate_files(model_id, trumpiverse_article, system_prompt_file, batch_size = 50, num_iterations = 1, override = False)
+    process_and_evaluate_files(model_id, trumpiverse_article, system_prompt_file, batch_size = 50, num_iterations = 1, override = True)
 
 
 if __name__ == "__main__":

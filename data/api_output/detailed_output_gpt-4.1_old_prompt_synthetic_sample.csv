@@ -1,0 +1,53 @@
+sentence,head,tail,relation_predicted_head_tail,relation_true_head_tail,correct_head_tail,relation_predicted_tail_head,relation_true_tail_head,correct_tail_head
+Trump hates Obama.,Trump,Obama,Negative,negative,False,none,none,True
+Obama is hated by Trump.,Obama,Trump,Negative,none,False,none,negative,False
+Trump said: �I hate Obama.�,Trump,Obama,Negative,negative,False,none,none,True
+"�I hate Obama,� said Trump.",Obama,Trump,Negative,none,False,none,negative,False
+Trump said he hated Obama.,Trump,Obama,Negative,negative,False,none,none,True
+"He hated Obama, Trump said.",Obama,Trump,Negative,none,False,none,negative,False
+Trump said: �Obama is an idiot�.,Trump,Obama,Negative,negative,False,none,none,True
+Trump said that Obama is an idiot.,Trump,Obama,Negative,negative,False,none,none,True
+Trump is an Obama-hater.,Trump,Obama,Negative,negative,False,none,none,True
+Trump is Obama�s enemy.,Trump,Obama,Negative,none,False,Negative,negative,False
+Trump talks derisively about Obama.,Trump,Obama,Negative,negative,False,none,none,True
+Trump is Obama�s worst neighbor.,Trump,Obama,Negative,none,False,none,negative,False
+Trump loves Obama.,Trump,Obama,Positive,positive,False,none,none,True
+Obama is loved by Trump.,Obama,Trump,Positive,none,False,none,positive,False
+Trump said: �I love Obama.�,Trump,Obama,Positive,positive,False,none,none,True
+"�I love Obama,� said Trump.",Obama,Trump,Positive,none,False,none,positive,False
+Trump said he loved Obama.,Trump,Obama,Positive,positive,False,none,none,True
+"He loved Obama, Trump said.",Obama,Trump,Positive,none,False,none,positive,False
+Trump said: �Obama is wonderful.�,Trump,Obama,Positive,positive,False,none,none,True
+Trump said that Obama is wonderful.,Trump,Obama,Positive,positive,False,none,none,True
+Trump is Obama�s admirer.,Trump,Obama,Positive,positive,False,none,none,True
+Trump is Obama�s favorite.,Trump,Obama,Positive,none,False,Positive,positive,False
+Trump talks fondly about Obama.,Trump,Obama,Positive,positive,False,none,none,True
+Trump is one of Obama�s most loyal neighbors.,Trump,Obama,Positive,positive,False,none,none,True
+Trump sent Obama an e-mail.,Trump,Obama,Neutral,neutral,False,none,none,True
+Obama received an e-mail from Trump.,Obama,Trump,Neutral,neutral,False,none,none,True
+Trump said: �I sent an e-mail to Obama.�,Trump,Obama,Neutral,neutral,False,none,none,True
+"�I sent an e-mail to Obama,� said Trump.",Obama,Trump,Neutral,none,False,none,neutral,False
+Trump said he sent an e-mail to Obama.,Trump,Obama,Neutral,neutral,False,none,none,True
+"He sent an e-mail to Obama, Trump said.",Obama,Trump,Neutral,none,False,none,neutral,False
+Trump said: �Obama is in the garden.�,Trump,Obama,none,none,True,none,none,True
+Trump said that Obama is in the garden.,Trump,Obama,none,none,True,none,none,True
+Trump and Obama like each other.,Trump,Obama,Positive,positive,False,Positive,positive,False
+Trump and Obama cooperate at work.,Trump,Obama,Neutral,positive,False,Neutral,positive,False
+Trump and Obama have a cordial relationship.,Trump,Obama,Positive,positive,False,Positive,positive,False
+Trump and Obama have a bad relationship,Trump,Obama,Negative,negative,False,Negative,negative,False
+Trump and Obama are friends.,Trump,Obama,Positive,positive,False,Positive,positive,False
+Trump and Obama are enemies.,Trump,Obama,Negative,negative,False,Negative,negative,False
+Trump and Obama hate each other.,Trump,Obama,Negative,negative,False,Negative,negative,False
+Trump and Obama fight all the time.,Trump,Obama,Negative,negative,False,Negative,negative,False
+Trump and Obama met at a summit.,Trump,Obama,Neutral,neutral,False,Neutral,neutral,False
+Both Trump and Obama were US Presidents.,Trump,Obama,none,none,True,none,none,True
+Trump and Obama exchanged business cards,Trump,Obama,Neutral,neutral,False,Neutral,neutral,False
+Trump spoke about Obama in a derogatory way.,Trump,Obama,Negative,negative,False,none,none,True
+Trump mentioned Obama in glowing terms.,Trump,Obama,Positive,positive,False,none,none,True
+Trump hired Obama.,Trump,Obama,Positive,positive,False,none,none,True
+Obama was hired by Trump.,Obama,Trump,Positive,none,False,none,positive,False
+Trump works for Obama�s company.,Trump,Obama,Neutral,neutral,False,none,neutral,False
+Trump sent a warm letter to Obama.,Trump,Obama,Positive,positive,False,none,none,True
+Trump received a warm letter from Obama.,Trump,Obama,Positive,none,False,none,positive,False
+Trump received a stern rebuke from Obama.,Trump,Obama,Negative,none,False,Negative,negative,False
+Trump sent a threat to Obama.,Trump,Obama,Negative,negative,False,Negative,none,False

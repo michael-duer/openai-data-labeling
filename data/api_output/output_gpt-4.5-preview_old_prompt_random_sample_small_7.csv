@@ -1,0 +1,21 @@
+sentence,head,tail,relation_predicted_head_tail,relation_predicted_tail_head,relation_true_head_tail,relation_true_tail_head
+"Kilimnik promised to brief Manafort ""in detail"" when he next saw him.",Kilimnik,Manafort,Neutral,none,positive,positive
+"Participants included Trump and his senior Campaign officials, such as Dan Scavino, Hope Hicks, Bannon, Kushner, Stephen Miller, and Jason Miller.",Bannon,Kushner,Neutral,Neutral,positive,positive
+"On June 22, after the Guccifer 2.0 persona had posted three additional sets of DNC documents to its WordPress site on June 18, 20 and 21, WikiLeaks reached out to Guccifer 2.0 via Twitter.",Wikileaks,Guccifer 2.0,Neutral,none,neutral,neutral
+At the lunch Anatoli Samochornov and Natalia Veselnitskaya were joined by Irakli Kaveladze and possibly Akhmetshin.,Anatoli Samochornov,Natalia Veselnitskaya,Neutral,Neutral,neutral,neutral
+"Lyovochkin likely provided funding to DMP on behalf of other oligarchs, particularly Firtash.",Firtash,DMP,Neutral,none,positive,none
+"Cohen recalled telling Trump that it would be ""really cool"" if ""we can get [Putin] to come here and have a burger with you over at the Trump Grille.""",Cohen,Trump,Positive,none,neutral,neutral
+"On June 24, 2013, Rhona Graff, Trump's assistant, wrote to Shugart, informing her that, ""DT wants to send a letter to Putin inviting him to Miss Universe.",Rhona Graff,Shugart,Neutral,none,neutral,neutral
+"Approximately two weeks after the meeting, Kilimnik told an associate that he had ""seen Manafort last week"" and ""got a sense that everything that Trump says about Russia and Ukraine is Trump's own emotional opinion, not campaign strategy.""",Kilimnik,Manafort,Neutral,none,neutral,neutral
+"Separately, Gates recalled Stone advising him, prior to the release of an August 14 article in The New York Times about Paul Manafort's ""secret ledger,"" that damaging information was going to be released about Podesta.",Stone,Gates,Neutral,none,positive,none
+"Rohrabacher told the Committee that he was unsure how the April 2016 Moscow meeting with Yakunin was arranged, but that it may have been proposed by then-Russian Government Ambassador to the United States Sergey Kislyak.",Sergey Kislyak,Russian Government,Positive,Positive,neutral,none
+Sater relayed that his process in approaching Zayats was similar to other tactics he used during the Trump Tower Moscow efforts.,Sater,Zayats,Neutral,none,positive,none
+"In addition to working with Stone, in late June, the Trump Campaign was searching for""note worthy"" DNC documents that had been posted by the GRU under the Guccifer 2.0 persona.",GRU,DNC,Negative,none,negative,none
+Trump Jr. appeared to have passed the email and photographs on to Donald Trump.,Trump Jr.,Donald Trump,Neutral,none,neutral,neutral
+"Emin and he both said the same continually: 'I know you didn't want to do this, I know you didn't want to set it up, but Mr. Agalarov really wanted it, and it's fine.'""",Emin,Agalarov,Positive,none,neutral,none
+"Oknyansky was accompanied to the meeting by Alexei Rasin, a Ukrainian associate involved in Florida real estate.",Oknyansky,Alexei Rasin,Neutral,Neutral,neutral,neutral
+"Jared Kushner had failed to disclose any foreign contacts, including meetings with Sergey Gorkov to the United States and the head of a Russian state bank.",Jared Kushner,Sergey Gorkov,Neutral,Neutral,neutral,neutral
+"“Reince Priebus has the full support of the Vice President,” says Pence’s chief of staff, Josh Pitcock.",Pence,Reince Priebus,Positive,none,positive,positive
+"FBI technical analysis of Papadopoulos's cell phone indicates that Mifsud sent Papadopoulos a text message on March 22, 2016, writing: ""My number: joseph'.""",Mifsud,Papadopoulos,Neutral,none,neutral,neutral
+"Kaveladze told the Committee: I was sitting between Mr. Kushner and Mr. Manafort and at some point of time Mr. Kushner looked very aggravated, very unhappy he was present there.",Kaveladze,Manafort,none,none,neutral,neutral
+"Since at least that time, Deripaska has acted as a proxy for the Russian state and intelligence services.",Deripaska,Russian state,Positive,Positive,positive,positive

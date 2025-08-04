@@ -1,0 +1,129 @@
+sentence,head,tail,relation_predicted_head_tail,relation_predicted_tail_head,relation_true_head_tail,relation_true_tail_head
+"The world’s richest man spent over $200 million to get Trump elected, and his Department Of Government Efficiency has exerted vast influence, rapidly slashing agencies like USAID and accessing the government’s payment and HR systems.",Elon Musk,Trump,positive,positive,positive,positive
+"The world’s richest man spent over $200 million to get Trump elected, and his Department Of Government Efficiency has exerted vast influence, rapidly slashing agencies like USAID and accessing the government’s payment and HR systems.",Elon Musk,Department Of Government Efficiency,positive,positive,positive,neutral
+"The world’s richest man spent over $200 million to get Trump elected, and his Department Of Government Efficiency has exerted vast influence, rapidly slashing agencies like USAID and accessing the government’s payment and HR systems.",Department Of Government Efficiency,USAID,negative,negative,negative,negative
+He’s also become inseparable with the commander in chief—even popping up in Trump family photos at Mar-A-Lago.,Elon Musk,Donald Trump,positive,positive,positive,positive
+How long can that last? (Net worth: More than $380 billion.),none,none,none,none,none,none
+"White House chief of staff led Trump’s 2024 campaign, and is widely credited with disciplining a chaotic operation.",Susie Wiles,Trump,positive,positive,positive,positive
+"Still, she’s reportedly felt out of the loop with Musk’s moves, and Trump’s prior chiefs of staff have struggled to stay employed.",Susie Wiles,Musk,none,none,negative,negative
+The deputy chief of staff has become a fierce advocate and public face of Trump’s deportation plans—and he was likely behind Trump’s surge of immigration executive orders within hours of taking office.,Stephen Miller,Trump,positive,positive,positive,positive
+His hardline views on immigration could cause clashes with allies like Musk.,Stephen Miller,Musk,negative,negative,negative,negative
+Trump’s Middle East envoy is getting a lot of credit for the Israel-Hamas ceasefire—and he’s touting Trump’s controversial plan for the U.S. to “take over” Gaza.,Steve Witkoff,Trump,positive,positive,positive,positive
+The real estate investor and Trump friend also took center stage on Inauguration Day.,Steve Witkoff,Trump,positive,positive,positive,positive
+(Net worth: At least $1 billion.),none,none,none,none,none,none
+"The billionaire v.c. was Trump’s biggest Silicon Valley backer in 2016, but more importantly, many of Trump’s allies have deep ties to Thiel or are his acolytes.",Peter Thiel,Trump,positive,positive,positive,positive
+"The billionaire v.c. was Trump’s biggest Silicon Valley backer in 2016, but more importantly, many of Trump’s allies have deep ties to Thiel or are his acolytes.",Trump’s allies,Thiel,positive,positive,positive,positive
+"JD Vance is a Thiel protégé, and Thiel is close with other Trump associates like Musk and Vivek Ramaswamy.",JD Vance,Peter Thiel,positive,positive,positive,positive
+"JD Vance is a Thiel protégé, and Thiel is close with other Trump associates like Musk and Vivek Ramaswamy.",Peter Thiel,Musk,positive,positive,positive,positive
+"JD Vance is a Thiel protégé, and Thiel is close with other Trump associates like Musk and Vivek Ramaswamy.",Peter Thiel,Vivek Ramaswamy,positive,positive,positive,positive
+His relationship with David Sacks—from mentor to co-author to co-founder of PayPal—goes back decades.,Peter Thiel,David Sacks,positive,positive,positive,positive
+"Thiel isn’t taking a formal Trump administration job, and he and Trump reportedly had a falling-out over donations in 2023.",Thiel,Trump,negative,negative,negative,negative
+But his influence over this White House—through all of his connections—should be massive.,Peter Thiel,White House,positive,positive,neutral,neutral
+(Net worth: $16.9 billion.),none,none,none,none,none,none
+"The vice president has carved out a bigger role in recent weeks, giving a controversial speech to U.S. allies in Munich and pushing the Senate GOP to advance Trump’s agenda.",JD Vance,Trump,positive,positive,positive,positive
+"The vice president has carved out a bigger role in recent weeks, giving a controversial speech to U.S. allies in Munich and pushing the Senate GOP to advance Trump’s agenda.",JD Vance,U.S. allies,neutral,neutral,neutral,neutral
+"The vice president has carved out a bigger role in recent weeks, giving a controversial speech to U.S. allies in Munich and pushing the Senate GOP to advance Trump’s agenda.",JD Vance,Senate GOP,positive,positive,neutral,neutral
+He also grabbed headlines by taking aim at judges who rule against Trump.,JD Vance,Trump,positive,positive,positive,positive
+He’s widely seen as Trump’s possible MAGA successor.,JD Vance,Trump,positive,positive,positive,positive
+(Net worth: Around $10 million.),none,none,none,none,none,none
+"The White House “border czar” is helping to lead Trump and Miller’s sweeping mass deportation program, and he’s a high-profile defender of the administration’s more contentious policies, like the plan to house deportees at Guantanamo Bay.",Tom Homan,Trump,positive,positive,positive,positive
+"The White House “border czar” is helping to lead Trump and Miller’s sweeping mass deportation program, and he’s a high-profile defender of the administration’s more contentious policies, like the plan to house deportees at Guantanamo Bay.",Tom Homan,Miller,positive,positive,positive,positive
+"The White House “border czar” is helping to lead Trump and Miller’s sweeping mass deportation program, and he’s a high-profile defender of the administration’s more contentious policies, like the plan to house deportees at Guantanamo Bay.",Tom Homan,Trump administration,positive,positive,positive,positive
+"Leads the Office of Management and Budget, a normally low-profile role that’s at the heart of Trump and Musk’s push to reshape—and dramatically slash—the federal bureaucracy, already shuttering some agencies entirely.",Russell Vought,Trump,positive,positive,positive,positive
+"Leads the Office of Management and Budget, a normally low-profile role that’s at the heart of Trump and Musk’s push to reshape—and dramatically slash—the federal bureaucracy, already shuttering some agencies entirely.",Russell Vought,Musk,positive,positive,positive,positive
+"Leads the Office of Management and Budget, a normally low-profile role that’s at the heart of Trump and Musk’s push to reshape—and dramatically slash—the federal bureaucracy, already shuttering some agencies entirely.",Russell Vought,Office of Management and Budget,positive,positive,positive,neutral
+"He believes Trump should be allowed to cut spending already approved by Congress, which could trigger a massive legal standoff.",Russell Vought,Trump,positive,positive,positive,positive
+"He believes Trump should be allowed to cut spending already approved by Congress, which could trigger a massive legal standoff.",Russell Vought,Congress,negative,negative,none,none
+"He believes Trump should be allowed to cut spending already approved by Congress, which could trigger a massive legal standoff.",Trump,Congress,negative,negative,none,none
+"Trump’s secretary of state is a leading Trump Yes Man in early foreign policy moves: Talks with Russia over the Ukraine war, the proposed Gaza takeover and even a longshot push to buy Greenland.",Marco Rubio,Trump,positive,positive,positive,positive
+"Trump’s secretary of state is a leading Trump Yes Man in early foreign policy moves: Talks with Russia over the Ukraine war, the proposed Gaza takeover and even a longshot push to buy Greenland.",Marco Rubio,Russia,neutral,neutral,none,none
+"He’s an Iran and China hawk, though he’s vowed to back “whatever the president’s policies are.”",Marco Rubio,Donald Trump,positive,positive,positive,positive
+"He’s an Iran and China hawk, though he’s vowed to back “whatever the president’s policies are.”",Marco Rubio,Iran,negative,negative,negative,none
+"He’s an Iran and China hawk, though he’s vowed to back “whatever the president’s policies are.”",Marco Rubio,China,negative,negative,negative,none
+(Net worth: Over $1 million.),none,none,none,none,none,none
+"Cantor Fitzgerald CEO and a longtime Trump friend, Lutnick was nominated Commerce Secretary, and he’s a regular presence at Mar-A-Lago and at Trump events.",Howard Lutnick,Trump,positive,positive,positive,positive
+"Cantor Fitzgerald CEO and a longtime Trump friend, Lutnick was nominated Commerce Secretary, and he’s a regular presence at Mar-A-Lago and at Trump events.",Howard Lutnick,Cantor Fitzgerald,positive,positive,positive,neutral
+"He wanted Treasury, but Trump reportedly grew tired of his campaigning.",Howard Lutnick,Trump,negative,negative,negative,negative
+(Net worth: Over $1.5 billion.),none,none,none,none,none,none
+"Deemed his father's “loyalty scanner,” he’s the only Trump child regularly in the mix.",Donald Trump Jr.,Trump,positive,positive,positive,positive
+"He describes his role as ensuring “bad actors are not getting into the administration,” and championed Vance for V.P.",Donald Trump Jr.,Vance,positive,positive,positive,positive
+"He describes his role as ensuring “bad actors are not getting into the administration,” and championed Vance for V.P.",Donald Trump Jr.,Trump administration,positive,positive,positive,positive
+"He’s not taking a formal role, instead joining prediction site Kalshi and a MAGA-leaning v.c. firm.",Donald Trump Jr.,Kalshi,neutral,neutral,neutral,neutral
+"He’s not taking a formal role, instead joining prediction site Kalshi and a MAGA-leaning v.c. firm.",Donald Trump Jr.,MAGA-leaning v.c. firm,positive,positive,neutral,neutral
+(Net worth: $50 million).,none,none,none,none,none,none
+"In one of Trump’s first big victories, his defense secretary—a former Fox News host—was confirmed by the Senate despite a bitter fight over a sexual assault allegation (which he denies) and controversial views.",Trump,Pete Hegseth,positive,positive,positive,positive
+"In one of Trump’s first big victories, his defense secretary—a former Fox News host—was confirmed by the Senate despite a bitter fight over a sexual assault allegation (which he denies) and controversial views.",Pete Hegseth,Senate,neutral,neutral,positive,positive
+"In one of Trump’s first big victories, his defense secretary—a former Fox News host—was confirmed by the Senate despite a bitter fight over a sexual assault allegation (which he denies) and controversial views.",Trump,Senate,neutral,neutral,positive,positive
+"In one of Trump’s first big victories, his defense secretary—a former Fox News host—was confirmed by the Senate despite a bitter fight over a sexual assault allegation (which he denies) and controversial views.",Pete Hegseth,Fox News,positive,positive,neutral,neutral
+"The hedge fund exec was easily confirmed as Treasury secretary, but Musk has gained access to the agency’s payment system with little pushback, making Bessent’s power unclear.",Scott Bessent,Musk,none,none,neutral,neutral
+"Trump’s sweeping tariff plans could also clash with Bessent, who’s called for more gradual tariffs.",Trump,Bessent,negative,negative,negative,negative
+"He won the job after Musk criticized him as a “business-as-usual choice,” but has Wall Street’s approval.",Scott Bessent,Musk,negative,none,none,negative
+"He won the job after Musk criticized him as a “business-as-usual choice,” but has Wall Street’s approval.",Scott Bessent,Wall Street,positive,positive,none,positive
+"She was confirmed for attorney general without much of a fight, and is already spearheading legal battles against Democratic states’ immigration policies.",Pam Bondi,Democratic states,negative,negative,negative,negative
+"A big-time Trump ally and former Florida AG, Bondi represented Trump in his first impeachment, signaling he wants a loyalist to helm the Justice Department.",Bondi,Trump,positive,positive,positive,positive
+"A big-time Trump ally and former Florida AG, Bondi represented Trump in his first impeachment, signaling he wants a loyalist to helm the Justice Department.",Trump,Justice Department,positive,positive,neutral,neutral
+Trump FBI director—a fierce loyalist—made it through the Senate despite his hardline views and promises to punish Trump’s supposed enemies.,Trump,Kash Patel,positive,positive,positive,positive
+Trump FBI director—a fierce loyalist—made it through the Senate despite his hardline views and promises to punish Trump’s supposed enemies.,FBI,Kash Patel,positive,positive,neutral,positive
+Trump FBI director—a fierce loyalist—made it through the Senate despite his hardline views and promises to punish Trump’s supposed enemies.,Kash Patel,Senate,neutral,neutral,positive,positive
+Trump FBI director—a fierce loyalist—made it through the Senate despite his hardline views and promises to punish Trump’s supposed enemies.,Kash Patel,Trump’s supposed enemies,negative,negative,negative,negative
+"One of Patel’s first moves was telling FBI staff not to respond to an email from Musk’s team demanding info on what they did over the last week, suggesting he’s intent on running the FBI himself.",Patel,FBI staff,negative,none,neutral,none
+"One of Patel’s first moves was telling FBI staff not to respond to an email from Musk’s team demanding info on what they did over the last week, suggesting he’s intent on running the FBI himself.",Patel,Musk’s team,negative,none,negative,negative
+"Trump’s Education secretary nominee, she co-chaired Trump’s transition, and her pro-wrestling DNA (she co-founded the company that became WWE with husband Vince) pairs well with Trump.",Trump,Linda McMahon,positive,positive,positive,positive
+"Trump’s Education secretary nominee, she co-chaired Trump’s transition, and her pro-wrestling DNA (she co-founded the company that became WWE with husband Vince) pairs well with Trump.",Linda McMahon,Vince,positive,positive,positive,positive
+"Trump’s Education secretary nominee, she co-chaired Trump’s transition, and her pro-wrestling DNA (she co-founded the company that became WWE with husband Vince) pairs well with Trump.",Linda McMahon,WWE,positive,positive,positive,neutral
+"Trump’s Education secretary nominee, she co-chaired Trump’s transition, and her pro-wrestling DNA (she co-founded the company that became WWE with husband Vince) pairs well with Trump.",WWE,Vince,positive,positive,neutral,positive
+She runs the MAGA-inspired America First Policy Institute think tank.,Linda McMahon,America First Policy Institute,positive,positive,positive,neutral
+(Vince McMahon’s net worth: About $3.2 billion.),Vince McMahon,none,none,none,none,none
+"Trump’s son-in-law told Forbes he may advise Trump informally, but so far, his influence is not apparent—though some see his hand in Trump’s dream of turning Gaza into the “riviera of the Middle East” (Kushner controversially suggested something like that last year).",Trump,Jared Kushner,positive,positive,positive,positive
+"Trump’s son-in-law told Forbes he may advise Trump informally, but so far, his influence is not apparent—though some see his hand in Trump’s dream of turning Gaza into the “riviera of the Middle East” (Kushner controversially suggested something like that last year).",Jared Kushner,Forbes,neutral,neutral,neutral,neutral
+He advised Lutnick and may assist more with Middle East diplomacy.,Jared Kushner,Lutnick,positive,positive,positive,positive
+(Net worth: Just under $1 billion.),none,none,none,none,none,none
+Trump’s Health and Human Services secretary made it through the Senate despite his history as vaccine skeptic whose views alarm a lot of experts.,Trump,Robert F. Kennedy Jr.,positive,positive,positive,positive
+Trump’s Health and Human Services secretary made it through the Senate despite his history as vaccine skeptic whose views alarm a lot of experts.,Robert F. Kennedy Jr.,Senate,neutral,neutral,positive,positive
+He’s also had to apologize for comparing Trump fans to Nazis.,Robert F. Kennedy Jr.,Trump fans,negative,negative,negative,negative
+(Net worth: about $15 million.),none,none,none,none,none,none
+"The UFC kingpin got a prime seat at Trump’s inauguration, and he’ll serve on Meta’s board, likely making him Trump’s envoy to the social media giant.",Dana White,Trump,positive,positive,positive,positive
+"The UFC kingpin got a prime seat at Trump’s inauguration, and he’ll serve on Meta’s board, likely making him Trump’s envoy to the social media giant.",Dana White,Meta,positive,positive,positive,neutral
+White and Trump’s decades-long friendship stretches back to when Trump hosted UFC fights at his Atlantic City casino.,White,Trump,positive,positive,positive,positive
+"A v.c. giant worth $1.8 billion, he has described himself as an “unpaid volunteer” for DOGE and said he spent about half his time post-Election Day at or near Mar-A-Lago, often helping to screen job candidates.",Marc Andreessen,DOGE,positive,positive,positive,neutral
+"He’s also become a major media surrogate for Trump, talking to various big news outlets about why so many Silicon Valley Democrats switched sides.",Marc Andreessen,Trump,positive,positive,positive,positive
+"He’s also become a major media surrogate for Trump, talking to various big news outlets about why so many Silicon Valley Democrats switched sides.",Marc Andreessen,big news outlets,neutral,neutral,neutral,neutral
+"He’s also become a major media surrogate for Trump, talking to various big news outlets about why so many Silicon Valley Democrats switched sides.",Marc Andreessen,Silicon Valley Democrats,none,none,neutral,neutral
+"He’s also become a major media surrogate for Trump, talking to various big news outlets about why so many Silicon Valley Democrats switched sides.",Trump,Silicon Valley Democrats,none,none,positive,positive
+"The Silicon Valley v.c. and friend of Musk’s will serve as Trump's “AI and crypto czar,” after fundraising for Trump in San Francisco, boosting the president-elect on his influential “All In” podcast and spending election night at Mar-A-Lago.",David Sacks,Trump,positive,positive,positive,positive
+"The Silicon Valley v.c. and friend of Musk’s will serve as Trump's “AI and crypto czar,” after fundraising for Trump in San Francisco, boosting the president-elect on his influential “All In” podcast and spending election night at Mar-A-Lago.",David Sacks,Musk,positive,positive,positive,positive
+"A longtime adviser, his stock surely fell after Trump’s attorneys launched an investigation for allegedly seeking payments from jobseekers, like Bessent, which Epshteyn denies.",Boris Epshteyn,Trump’s attorneys,negative,negative,negative,negative
+"A longtime adviser, his stock surely fell after Trump’s attorneys launched an investigation for allegedly seeking payments from jobseekers, like Bessent, which Epshteyn denies.",Boris Epshteyn,Bessent,none,none,neutral,neutral
+But Trump shared an article praising his “loyalty”—suggesting he’s still in the president-elect’s good graces.,Boris Epshteyn,Trump,positive,positive,positive,positive
+(He and Musk are reported rivals.),Boris Epshteyn,Musk,negative,negative,negative,negative
+"The entrepreneur, once a key Trump surrogate, is leaving DOGE after he clashed with Trump allies on H-1B visas and reportedly had “worn out his welcome” in the inner circle—and lost favor with Musk, who reportedly helped push him out.",Vivek Ramaswamy,Trump,positive,positive,negative,negative
+"The entrepreneur, once a key Trump surrogate, is leaving DOGE after he clashed with Trump allies on H-1B visas and reportedly had “worn out his welcome” in the inner circle—and lost favor with Musk, who reportedly helped push him out.",Vivek Ramaswamy,Trump allies,negative,negative,negative,negative
+"The entrepreneur, once a key Trump surrogate, is leaving DOGE after he clashed with Trump allies on H-1B visas and reportedly had “worn out his welcome” in the inner circle—and lost favor with Musk, who reportedly helped push him out.",Vivek Ramaswamy,DOGE,none,none,negative,neutral
+"The entrepreneur, once a key Trump surrogate, is leaving DOGE after he clashed with Trump allies on H-1B visas and reportedly had “worn out his welcome” in the inner circle—and lost favor with Musk, who reportedly helped push him out.",Vivek Ramaswamy,Musk,negative,negative,negative,negative
+He’s expected to run for governor of Ohio next,Vivek Ramaswamy,Ohio,none,none,positive,none
+"Trump chose the Democrat-turned-Trump backer for director of national intelligence, and she reportedly sat in on transition meetings.",Trump,Tulsi Gabbard,positive,positive,positive,positive
+"Trump chose the Democrat-turned-Trump backer for director of national intelligence, and she reportedly sat in on transition meetings.",Tulsi Gabbard,national intelligence,none,none,positive,neutral
+But she’s controversial for her comments on Russia and Syria.,Tulsi Gabbard,Russia,none,none,none,none
+But she’s controversial for her comments on Russia and Syria.,Tulsi Gabbard,Syria,none,none,none,none
+"The bombastic podcaster and Turning Point USA founder played a role in Trump’s get-out-the-vote efforts, and he reportedly helped screen Trump administration job candidates for loyalty.",Charlie Kirk,Trump,positive,positive,positive,positive
+"The bombastic podcaster and Turning Point USA founder played a role in Trump’s get-out-the-vote efforts, and he reportedly helped screen Trump administration job candidates for loyalty.",Charlie Kirk,Turning Point USA,none,none,positive,neutral
+"The bombastic podcaster and Turning Point USA founder played a role in Trump’s get-out-the-vote efforts, and he reportedly helped screen Trump administration job candidates for loyalty.",Charlie Kirk,Trump administration,positive,positive,positive,positive
+He’s known for his ties to Donald Trump Jr.,Charlie Kirk,Donald Trump Jr.,none,none,positive,positive
+"The GOP megadonor—worth $49.6 billion—could be a key figure in the fight over TikTok, as his trading firm owns a stake in parent company ByteDance.",Jeffrey Yass,ByteDance,positive,none,positive,neutral
+"The GOP megadonor—worth $49.6 billion—could be a key figure in the fight over TikTok, as his trading firm owns a stake in parent company ByteDance.",GOP,Jeffrey Yass,none,none,positive,positive
+"Trump is now opposed to banning TikTok on national security grounds, a reversal from 2020.",Trump,none,none,none,none,none
+"The oil tycoon—worth $18.5 billion—reportedly raised money for Trump, and was often spotted at Mar-A-Lago.",Harold Hamm,Trump,positive,positive,positive,positive
+He’s pushed to undo Biden-era electric car credits.,Harold Hamm,Biden,negative,none,negative,none
+"The Blackstone co-founder—worth some $47.7 billion—backed Trump despite earlier reservations, and reportedly advised Lutnick on the transition.",Steve Schwarzman,Trump,positive,positive,positive,positive
+"The Blackstone co-founder—worth some $47.7 billion—backed Trump despite earlier reservations, and reportedly advised Lutnick on the transition.",Steve Schwarzman,Lutnick,positive,none,positive,positive
+"The Blackstone co-founder—worth some $47.7 billion—backed Trump despite earlier reservations, and reportedly advised Lutnick on the transition.",Blackstone,Steve Schwarzman,none,none,neutral,positive
+Trump is reportedly mulling the former Federal Reserve board member for Fed chair after Jerome Powell’s term ends in 2026—though he wasn’t picked for Treasury secretary.,Trump,Kevin Warsh,positive,positive,positive,neutral
+Trump is reportedly mulling the former Federal Reserve board member for Fed chair after Jerome Powell’s term ends in 2026—though he wasn’t picked for Treasury secretary.,Federal Reserve board,Kevin Warsh,none,none,neutral,neutral
+Trump is reportedly mulling the former Federal Reserve board member for Fed chair after Jerome Powell’s term ends in 2026—though he wasn’t picked for Treasury secretary.,Trump,Jerome Powell,none,none,none,none
+"This banking heir gave some $150 million to help elect Trump, more than anyone else.",Timothy Mellon,Trump,positive,positive,positive,positive
+It’s not clear what role the reclusive former railroad exec could play.,Timothy Mellon,none,none,none,none,none
+(His family is worth $14.1 billion.),Timothy Mellon,none,none,none,none,none
+"The widow of Sheldon Adelson—worth $32.2 billion—is among Trump’s biggest donors, getting a good spot at Trump’s inauguration.",Miriam Adelson,Trump,positive,positive,positive,positive
+"The widow of Sheldon Adelson—worth $32.2 billion—is among Trump’s biggest donors, getting a good spot at Trump’s inauguration.",Miriam Adelson,Sheldon Adelson,positive,positive,positive,positive
+"The former Fox News host has linked himself to Trump, speaking at his Madison Square Garden rally and hosting a show from Mar-A-Lago on election night.",Tucker Carlson,Trump,positive,positive,positive,positive
+"The former Fox News host has linked himself to Trump, speaking at his Madison Square Garden rally and hosting a show from Mar-A-Lago on election night.",Fox News,Tucker Carlson,none,none,neutral,neutral

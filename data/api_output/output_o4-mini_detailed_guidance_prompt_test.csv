@@ -1,0 +1,4 @@
+sentence,head,tail,rel_head_tail,rel_tail_head
+"The world’s richest man spent over $200 million to get Trump elected, and his Department Of Government Efficiency has exerted vast influence, rapidly slashing agencies like USAID and accessing the government’s payment and HR systems.",Elon Musk,Trump,positive,positive
+"The world’s richest man spent over $200 million to get Trump elected, and his Department Of Government Efficiency has exerted vast influence, rapidly slashing agencies like USAID and accessing the government’s payment and HR systems.",Elon Musk,Department Of Government Efficiency,positive,neutral
+"The world’s richest man spent over $200 million to get Trump elected, and his Department Of Government Efficiency has exerted vast influence, rapidly slashing agencies like USAID and accessing the government’s payment and HR systems.",Department Of Government Efficiency,USAID,negative,negative

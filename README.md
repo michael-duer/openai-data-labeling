@@ -11,7 +11,6 @@ If ground truth labels are provided, the tool can also compute evaluation metric
 - [Requirements](#requirements)
 - [Setup](#setup)
 - [Usage](#usage)
-- [Output Format](#output-format)
 - [Evaluation Metrics](#evaluation-metrics)
 - [Example](#example)
 - [Known Issues and Problems with the API](#known-issues-and-problems-with-the-api)
@@ -71,8 +70,8 @@ If ground truth labels are provided, the tool can also compute evaluation metric
 1. **Clone the Repository**
 
 ```bash
-git clone https://github.com/michael-duer/openai-data-labeling.git
-cd openai-data-labeling
+git clone https://github.com/michael-duer/entity-relation-annotator.git
+cd entity-relation-annotator
 ```
 
 2. **Install Python Dependencies**

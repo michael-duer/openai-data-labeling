@@ -208,9 +208,10 @@ def save_results_to_csv(results, input_file, output_file):
 
     # Convert results (list of dicts) to DataFrame
     results_df = pd.DataFrame(results)
-
-    # Check if ground truth columns exist
-    if not has_ground_truth_columns(input_data):
+    
+    # Check if ground truth columns exist in input file
+    ground_truth_columns = ["rel_head_tail", "rel_tail_head"]
+    if not all(col in input_data.columns for col in ground_truth_columns):
         # Save results without merging to the output CSV
         output_filepath = os.path.join("..", "data", "api_output", output_file)
         results_df.to_csv(output_filepath, index=False)

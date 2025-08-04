@@ -1,12 +1,13 @@
 from openai import OpenAI
 import os
 from dotenv import load_dotenv
-import csv
+import json
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, accuracy_score
 import krippendorff
 from thefuzz import process
+from tqdm import tqdm
 
 # Load API key from environment variable
 load_dotenv()  
@@ -511,3 +512,91 @@ def generate_confusion_matrix(model_id, system_prompt_file, input_file, output_f
     plot_name = f"cm_{generate_filename(model_id,system_prompt_file,input_file)}.png"
     plot_filepath = os.path.join("..","data","evaluation","confusion_matrices", plot_name)
     disp.figure_.savefig(plot_filepath)
+
+def process_and_evaluate_files(model_id, test_files, system_prompt, batch_size = 10, override = False):
+    """
+    Run API-based relation labeling on one or more input files using a specified model and prompt.
+
+    Parameters:
+    - model_id: The OpenAI model to use.
+    - test_files: List of input CSV files to process.
+    - system_prompt_file: Path to the system prompt text file.
+    - batch_size: Number of rows per batch sent to the API.
+    - override: If True, reprocess files even if output already exists.
+    """
+
+    # Loop over list of test files
+    for file_index, input_file in enumerate(test_files):
+        retry = True
+        # Retry mechanism in case the number of input and output sentences don't match
+        while retry:
+            retry = False # Only retry if mismatch detected
+            
+            # Generate output name and check if name already exists in output folder
+            output_file = f"output_{generate_filename(model_id,system_prompt,input_file)}.csv"
+            output_dir = os.path.abspath(os.path.join("..", "data", "api_output"))
+            output_filepath = os.path.join(output_dir, output_file)
+            file_exists = os.path.exists(output_filepath)
+
+            if file_exists and not override:
+                print(f"Skipping {input_file} -> Output file already exists.")
+                break
+            
+            # Load files
+            data = load_csv(input_file)
+            # Save number to compare with output
+            num_sentences_input = len(data)
+
+            print("------------------------------------------------------------")
+            print(f"[START] Processing: {input_file}\n")
+
+            # Create list of prompts based on input file
+            prompts = generate_prompts(data, batch_size)
+        
+            # Send batched prompts to the API and collect predicted relation labels
+            results = []
+            for batch_index, prompt in tqdm(enumerate(prompts), total=len(prompts), desc="Processing batches"):
+                response = generate_relation_labels(prompt, 
+                                                system_prompt = system_prompt, 
+                                                model = model_id, 
+                                                temperature = 0)
+                
+                if response is None:
+                    print(f"❌ API returned `None` for batch {batch_index+1}")
+                    # Execute response = generate_relation_labels again?
+                elif response.strip() == "":
+                    print(f"⚠️ Empty response for batch {batch_index+1}")
+                
+                if response:
+                    try:
+                        labeled_data = json.loads(response)
+                        results.extend(labeled_data)
+                    except json.JSONDecodeError:
+                        print("Failed to parse API response as JSON.")
+                        print(f"API Response: {response}")
+                        # Add empty json if API response fails to not mess up the order of the sentences for the comparison step
+                        results.extend([{"sentence": "","head": "","tail": "","rel_head_tail": "","rel_tail_head": ""}])
+
+            save_results_to_csv(results, input_file, output_file)
+
+            # Compare number of input and output sentences
+            output_data = load_csv(output_filepath)
+            num_sentences_output = len(output_data)
+
+            if num_sentences_input != num_sentences_output:
+                print(f"\n⚠️ Mismatch in number of sentences: input = {num_sentences_input}, output = {num_sentences_output}\n")
+                user_input = input("Do you want to re-label this file? [y/n] ").strip().lower()
+                if user_input == "y":
+                    print("🔁 Re-running labeling process...")
+                    override = True  # ensure re-labeling overwrites previous broken file
+                    continue
+                else:
+                    print("⏩ Skipping file due to mismatch.")
+                    break
+
+            # Compare results with true values and generate confusion matrix
+            evaluate_model_predictions(model_id, system_prompt, input_file, output_file)
+            generate_confusion_matrix(model_id, system_prompt, input_file, output_file, show_plot=False)
+
+            print(f"[END] Finished processing file {file_index+1} of {len(test_files)}.")
+            print("------------------------------------------------------------\n")

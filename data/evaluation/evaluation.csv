@@ -176,3 +176,8 @@ random_sample_small_11.csv,50,o4-mini,bidirectional_prompt.txt,57.0,0.4031,0.426
 random_sample_small_12.csv,50,o4-mini,bidirectional_prompt.txt,52.0,0.309,0.36
 forbes_trumpiverse.csv,128,o4-mini,detailed_guidance_prompt.txt,81.64,0.7171,0.7552
 synthetic_sample.csv,52,o4-mini,detailed_guidance_prompt.txt,58.65,0.4424,0.4487
+forbes_trumpiverse.csv,128,gpt-4o-mini,detailed_guidance_prompt.txt,66.8,0.5116,0.5573
+news_articles_trump_musk_labeled_md.csv,1815,gpt-5-mini,detailed_guidance_prompt.txt,67.02,0.5402,0.5603
+news_articles_trump_musk_labeled_md.csv,1815,o4-mini,detailed_guidance_prompt.txt,64.52,0.5098,0.5269
+news_articles_trump_musk_labeled_md.csv,1815,gpt-5,detailed_guidance_prompt.txt,69.2,0.5726,0.5893
+forbes_trumpiverse.csv,128,gpt-5,detailed_guidance_prompt.txt,86.72,0.7987,0.8229

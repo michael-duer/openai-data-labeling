@@ -2,7 +2,7 @@ from helper_functions import *
 
 def main(): 
     # Specify model and system prompt to use
-    model_id = "o4-mini" # gpt-4-turbo, gpt-3.5-turbo, gpt-4o, gpt-4.1, gpt-4o-mini, o1, o4-mini
+    model_id = "gpt-5" # gpt-4-turbo, gpt-3.5-turbo, gpt-4o, gpt-4.1, gpt-4o-mini, o1, o4-mini
     system_prompt_file = "detailed_guidance_prompt.txt" # "zero_shot_prompt.txt" "detailed_guidance_prompt.txt" "moderate_guidance_prompt.txt"
     
     # 10 small samples with 50 sentences each
@@ -17,10 +17,11 @@ def main():
     # Single files must be inside a list for the function to work properly
     trumpiverse_article = ["forbes_trumpiverse.csv"]
     synthetic_data = ["synthetic_sample.csv"]
+    articles_trump_musk = ["news_articles_trump_musk_labelled_md.csv"]
 
     # Call API with set parameters on chosen set of files
     # Using too many files/sentences might lead to rate limiting and worse performance 
-    process_and_evaluate_files(model_id, trumpiverse_article, system_prompt_file, batch_size = 50, override = True)
+    process_and_evaluate_files(model_id, trumpiverse_article, system_prompt_file, batch_size = 100, override = True)
 
 
 if __name__ == "__main__":
